@@ -1,27 +1,171 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# テーブル設計
 
-Things you may want to cover:
+## users テーブル
 
-* Ruby version
+| Column             | Type        | Options     |
+| ------------------ | ----------- | ----------- |
+| email              | string      | null: false, unique: true |
+| encrypted_password | string      | null: false |
+| name               | string      | null: false |
+| role               | integer     | null: false |
+| company_id         | references  | null: true, foreign_key: true |
+| active             | boolean     | null: false, default: true |
 
-* System dependencies
+### Association
+- belongs_to :company, optional: true
+- has_many :created_treatment_days, class_name: "TreatmentDay", foreign_key: :created_by_id
+- has_many :assigned_treatment_days, class_name: "TreatmentDay", foreign_key: :therapist_id
+- has_many :reservations
 
-* Configuration
 
-* Database creation
 
-* Database initialization
+## companies テーブル
 
-* How to run the test suite
+| Column              | Type        | Options     |
+| ------------------- | ----------- | ----------- |
+| company_name        | string      | null: false |
+| person_name         | string      | null: false |
+| email               | string      | null: false |
+| phone               | string      | null: false |
+| active              | boolean     | null: false, default: true |
 
-* Services (job queues, cache servers, search engines, etc.)
+### Association
+- has_many :users
+- has_many :treatment_days
+- has_many :reservations, through: :treatment_days
 
-* Deployment instructions
 
-* ...
+## treatment_days テーブル
+
+| Column              | Type        | Options     |
+| ------------------- | ----------- | ----------- |
+| date                | date        | null: false |
+| booking_source      | integer     | null: false |
+| status              | integer     | null: false |
+| note                | text        | null: true  |
+| company_id          | references  | null: false, foreign_key: true |
+| therapist_id        | references  | null: true, foreign_key: { to_table: :users } |
+| created_by_id       | references  | null: false, foreign_key: { to_table: :users } |
+
+### Association
+- has_many :time_slots
+- belongs_to :company
+- belongs_to :therapist, class_name: "User", foreign_key: :therapist_id, optional: true
+- belongs_to :created_by, class_name: "User", foreign_key: :created_by_id
+- has_many :reservations, through: :time_slots
+
+
+## time_slots テーブル
+
+| Column              | Type        | Options     |
+| ------------------- | ----------- | ----------- |
+| start_time          | time        | null: false |
+| end_time            | time        | null: false |
+| treatment_day_id    | references  | null: false, foreign_key: true |
+
+### Association
+- belongs_to :treatment_day
+- has_many :reservations
+
+
+## reservations テーブル
+
+| Column              | Type        | Options     |
+| ------------------- | ----------- | ----------- |
+| status              | integer     | null: false |
+| cancel_reason       | text        | null: true  |
+| note                | text        | null: true  |
+| user_id             | references  | null: false, foreign_key: true |
+| time_slot_id        | references  | null: false, foreign_key: true |
+
+### Association
+- belongs_to :user
+- belongs_to :time_slot
+- has_one :treatment_day, through: :time_slot
+
+## ER図
+<img width="886" height="609" alt="Image" src="https://github.com/user-attachments/assets/605376f9-e11b-49f8-b655-a7767eb51200" />
+
+
+# 設計ルール
+
+## ユーザー権限
+- role は `admin / therapist / company_manager / employee` を想定
+- `admin` は company_id を持たない
+- `therapist` は company_id を持たない
+- `company_manager` は company_id 必須
+- `employee` は company_id 必須
+
+## 予約ルール
+- 利用者は所属会社の予約枠のみ予約できる
+- 1つの `time_slot` に対する予約は1件まで
+- キャンセル時は `status` を更新し、必要に応じて `cancel_reason` を保持する
+- 予約対象者は `users` テーブルのうち利用者ロールを想定する
+
+## 施術日・時間枠ルール
+- `treatment_day` は会社単位で作成する
+- `time_slot` は `treatment_day` に紐づく
+- `start_time` は `end_time` より前であること
+- 同一 `treatment_day` 内で時間枠が重複しないようにする
+- `therapist_id` は未割当を許可する
+
+## ステータス管理
+- `users.role` は enum で管理する
+- `treatment_days.status` は enum で管理する
+- `treatment_days.booking_source` は enum で管理する
+- `reservations.status` は enum で管理する
+
+## 削除・無効化方針
+- ユーザーと会社は原則 `active` で有効/無効を管理する
+- 予約実績のあるデータは物理削除を避ける
+- 関連データがある場合の削除可否は今後要検討
+
+## 今後詰めること
+- status / booking_source の候補値
+- 会社責任者が代理予約できるか
+- キャンセル済み予約を一意制約の対象外にするか
+
+
+# Enum定義
+
+## 各種enum
+```ruby
+# User
+enum role: {
+  admin: 0,
+  therapist: 1,
+  company_manager: 2,
+  employee: 3
+}
+
+# TreatmentDay.booking_source
+enum booking_source: {
+  app: 0,
+  phone: 1,
+  email: 2,
+  admin_input: 3
+}
+
+# TreatmentDay.status
+enum status: {
+  pending: 0,
+  confirmed: 1,
+  cancelled: 2
+}
+
+# Reservation
+enum status: {
+  reserved: 0,
+  cancelled: 1,
+  completed: 2
+}
+
+
+```
+
+
 
 
 
