@@ -26,7 +26,6 @@
 | Column              | Type        | Options     |
 | ------------------- | ----------- | ----------- |
 | company_name        | string      | null: false |
-| person_name         | string      | null: false |
 | email               | string      | null: false |
 | phone               | string      | null: false |
 | active              | boolean     | null: false, default: true |
@@ -86,8 +85,7 @@
 - has_one :treatment_day, through: :time_slot
 
 ## ER図
-<img width="886" height="609" alt="Image" src="https://github.com/user-attachments/assets/605376f9-e11b-49f8-b655-a7767eb51200" />
-
+<img width="926" height="605" alt="Image" src="https://github.com/user-attachments/assets/d471a506-5dfb-4cb3-a719-f7942a5e04d2" />
 
 # 設計ルール
 
