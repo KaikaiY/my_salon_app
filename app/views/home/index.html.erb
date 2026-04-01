@@ -1,0 +1,9 @@
+<h1>サロンアプリへようこそ！！</h1>
+  <% if user_signed_in? %>
+    <p>ログイン中です</p>
+  <% else %> 
+    <p>ログインしていません</p>
+    <%= link_to 'ログイン', new_user_session_path, class: "login" %>
+    <%= link_to '新規登録', new_user_registration_path, class: "sign-up" %>
+  <% end %> 
+
