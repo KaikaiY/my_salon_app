@@ -1,0 +1,21 @@
+<h1>会社一覧</h1>
+<%= link_to '会社登録ページへ', new_company_path, class: "company-record"%>
+<div class="company-contents">
+  <ul class="company-lists">
+    <% @companies.each do |company|%>
+      <%= link_to company_path(company) do %>
+        <li class="company-list">
+          <div class="company-name">
+            <span>会社名:<%= company.company_name %></span>
+          </div>
+          <div class="company-email">
+            <span>メールアドレス:<%= company.email %></span>
+            </div>
+          <div class="company-phone">
+            <span>電話番号:<%= company.phone %></span>
+          </div>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+</div>
