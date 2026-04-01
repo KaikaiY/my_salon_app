@@ -3,4 +3,14 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
+  validates :name, :email, :role, presence: true
+
+  belongs_to :company, optional: true
+  enum :role, {
+    admin: 0,
+    therapist: 1,
+    company_manager: 2,
+    employee: 3
+  }
 end
