@@ -4,9 +4,10 @@
     <% if current_user.admin? %>
       <%= link_to '会社登録ページへ', new_company_path, class: "company-record"%>
       <%= link_to '会社一覧ページへ', companies_path, class: "company-list"%>
+      <%= link_to '招待管理ページへ', invitations_path, class: "invitation-list" %>
+      <%= link_to '招待作成ページへ', new_invitation_path, class: "invitation-new" %>
     <% end %>
   <% else %> 
     <p>ログインしていません</p>   
   <% end %> 
-
 

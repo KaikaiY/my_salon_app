@@ -55,10 +55,4 @@ class CompaniesController < ApplicationController
     params.require(:company).permit(:company_name, :email, :phone)
   end
 
-  def ensure_admin!
-    return if current_user.admin?
-
-    redirect_to root_path, alert: "権限がありません"
-  end
-  
 end

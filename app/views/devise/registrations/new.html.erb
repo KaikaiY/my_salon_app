@@ -1,15 +1,22 @@
-<h2>Sign up</h2>
+<h2>招待ユーザー登録</h2>
 
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 
+  <%= f.hidden_field :invitation_token, value: params[:invitation_token] || params.dig(:user, :invitation_token) %>
+
   <div class="field">
-    <p><%= f.label :email %></p>
-    <p><%= f.email_field :email, autofocus: true, autocomplete: "email" %></p>
+    <p><%= f.label :name, "名前" %></p>
+    <p><%= f.text_field :name, autofocus: true, autocomplete: "name" %></p>
   </div>
 
   <div class="field">
-    <p><%= f.label :password %></p>
+    <p><%= f.label :email, "メールアドレス" %></p>
+    <p><%= f.email_field :email, autocomplete: "email", value: resource.email, readonly: true %></p>
+  </div>
+
+  <div class="field">
+    <p><%= f.label :password, "パスワード" %></p>
     <% if @minimum_password_length %>
       <p><em>(<%= @minimum_password_length %> characters minimum)</em></p>
     <% end %>
@@ -17,12 +24,12 @@
   </div>
 
   <div class="field">
-    <p><%= f.label :password_confirmation %></p>
+    <p><%= f.label :password_confirmation, "パスワード確認" %></p>
     <p><%= f.password_field :password_confirmation, autocomplete: "new-password" %></p>
   </div>
 
   <div class="actions">
-    <%= f.submit "Sign up" %>
+    <%= f.submit "登録申請する" %>
   </div>
 <% end %>
 

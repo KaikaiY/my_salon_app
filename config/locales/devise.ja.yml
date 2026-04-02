@@ -1,0 +1,4 @@
+ja:
+  devise:
+    failure:
+      inactive: "管理者の承認後にログインできます。"

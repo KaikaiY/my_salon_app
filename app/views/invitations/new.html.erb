@@ -1,0 +1,37 @@
+<h2>招待作成</h2>
+
+<%= form_with model: @invitation do |f| %>
+  <% if @invitation.errors.any? %>
+    <div>
+      <ul>
+        <% @invitation.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <p><%= f.label :email, "メールアドレス" %></p>
+    <p><%= f.email_field :email %></p>
+  </div>
+
+  <div>
+    <p><%= f.label :company_id, "会社" %></p>
+    <p><%= f.collection_select :company_id, Company.all, :id, :company_name, prompt: "選択してください" %></p>
+  </div>
+
+  <div>
+    <p><%= f.label :role, "権限" %></p>
+    <p><%= f.select :role, Invitation.roles.keys.excluding("admin").map { |role| [role, role] }, prompt: "選択してください" %></p>
+  </div>
+
+  <div>
+    <p><%= f.label :expires_at, "有効期限" %></p>
+    <p><%= f.datetime_field :expires_at %></p>
+  </div>
+
+  <div>
+    <%= f.submit "招待を作成する" %>
+  </div>
+<% end %>
