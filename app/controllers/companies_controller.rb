@@ -1,11 +1,12 @@
 class CompaniesController < ApplicationController
+  before_action :set_company, only: [:show, :edit, :update, :destroy]
+
 
   def index
     @companies = Company.all
   end
 
   def show
-    @company = Company.find(params[:id])
   end
 
   def new
@@ -21,9 +22,35 @@ class CompaniesController < ApplicationController
     end
   end
 
+  def edit
+  end
+
+  def update
+    if @company.update(company_params)
+      redirect_to company_path(@company.id), notice: '更新しました'
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    if @company.destroy
+      redirect_to companies_path, notice: '削除しました'
+    else
+      render :show, status: :unprocessable_entity
+    end
+  end
+
+
+
   private
+
+  def set_company
+    @company = Company.find(params[:id])
+  end
 
   def company_params
     params.require(:company).permit(:company_name, :email, :phone)
   end
+
 end

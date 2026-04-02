@@ -11,3 +11,5 @@
     <span>電話番号:<%= @company.phone %></span>
   </div>
 </div>
+<%= link_to "会社の編集", edit_company_path(@company.id), class: "company-edit" %>
+<%= link_to "会社の削除", company_path(@company.id), data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, class: "company-destroy" %>
