@@ -4,7 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  validates :name, :email, :role, presence: true
+  validates :name, :role, presence: true
 
   belongs_to :company, optional: true
   enum :role, {
