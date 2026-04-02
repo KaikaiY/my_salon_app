@@ -164,6 +164,11 @@ enum status: {
 ```
 
 
+# 初期管理者アカウントについて
+
+初期管理者アカウントは、招待機能では作成しません。
+本番環境では Rails console から直接作成してください。
+admin 権限は招待では付与できない設計です。
 
 
 
@@ -206,7 +211,7 @@ enum status: {
 ## 使用技術
 - Ruby
 - Ruby on Rails
-- PostgreSQL
+- MySQL
 - Devise
 - Tailwind CSS
 
@@ -219,6 +224,8 @@ enum status: {
 - メール通知機能の追加
 - カレンダーUIの改善
 - 予約変更・キャンセル機能の強化
+
+
 
 <!-- ## セットアップ
 ```bash
