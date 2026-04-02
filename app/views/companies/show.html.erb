@@ -1,0 +1,15 @@
+<h1>会社詳細</h1>
+<%= link_to '会社一覧ページへ', companies_path %>
+<div class="company-show">
+  <div class="company-name">
+    <span>会社名:<%= @company.company_name %></span>
+  </div>
+  <div class="company-email">
+    <span>メールアドレス:<%= @company.email %></span>
+    </div>
+  <div class="company-phone">
+    <span>電話番号:<%= @company.phone %></span>
+  </div>
+</div>
+<%= link_to "会社の編集", edit_company_path(@company.id), class: "company-edit" %>
+<%= link_to "会社の削除", company_path(@company.id), data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, class: "company-destroy" %>

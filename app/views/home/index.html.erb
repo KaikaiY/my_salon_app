@@ -1,0 +1,12 @@
+<p style="color: red;">サロンアプリへようこそ！！</p>
+  <% if user_signed_in? %>
+    <p>ログイン中です</p>
+    <% if current_user.admin? %>
+      <%= link_to '会社登録ページへ', new_company_path, class: "company-record"%>
+      <%= link_to '会社一覧ページへ', companies_path, class: "company-list"%>
+    <% end %>
+  <% else %> 
+    <p>ログインしていません</p>   
+  <% end %> 
+
+
