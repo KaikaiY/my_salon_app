@@ -17,12 +17,14 @@ class Invitation < ApplicationRecord
     expired: 3
   }
 
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+
   before_validation :assign_token, on: :create
   before_validation :set_default_expiration, on: :create
 
   validates :email, presence: true, 
                     length: { maximum: 255 },
-                    format: { with: Company.VALID_EMAIL_REGEX }
+                    format: { with: VALID_EMAIL_REGEX }
   validates :token, presence: true, uniqueness: true
   validates :role, presence: true
   validates :expires_at, presence: true
