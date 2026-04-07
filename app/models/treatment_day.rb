@@ -2,6 +2,7 @@ class TreatmentDay < ApplicationRecord
   belongs_to :company
   belongs_to :therapist, class_name: "User", optional: true
   belongs_to :created_by, class_name: "User"
+  has_many :time_slots
 
   enum :booking_source, {
     app: 0,
