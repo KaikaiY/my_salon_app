@@ -1,6 +1,7 @@
 class Company < ApplicationRecord
   has_many :users
   has_many :invitations, dependent: :destroy
+  has_many :treatment_days
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   
