@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_04_07_043548) do
+ActiveRecord::Schema[7.1].define(version: 2026_04_07_044340) do
   create_table "companies", charset: "utf8mb3", force: :cascade do |t|
     t.string "company_name", null: false
     t.string "email", null: false
@@ -38,6 +38,18 @@ ActiveRecord::Schema[7.1].define(version: 2026_04_07_043548) do
     t.index ["invited_by_id"], name: "index_invitations_on_invited_by_id"
     t.index ["token"], name: "index_invitations_on_token", unique: true
     t.index ["user_id"], name: "index_invitations_on_user_id"
+  end
+
+  create_table "reservations", charset: "utf8mb3", force: :cascade do |t|
+    t.integer "status", default: 0, null: false
+    t.text "cancel_reason"
+    t.text "note"
+    t.bigint "user_id", null: false
+    t.bigint "time_slot_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["time_slot_id"], name: "index_reservations_on_time_slot_id"
+    t.index ["user_id"], name: "index_reservations_on_user_id"
   end
 
   create_table "time_slots", charset: "utf8mb3", force: :cascade do |t|
@@ -84,6 +96,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_04_07_043548) do
   add_foreign_key "invitations", "companies"
   add_foreign_key "invitations", "users"
   add_foreign_key "invitations", "users", column: "invited_by_id"
+  add_foreign_key "reservations", "time_slots"
+  add_foreign_key "reservations", "users"
   add_foreign_key "time_slots", "treatment_days"
   add_foreign_key "treatment_days", "companies"
   add_foreign_key "treatment_days", "users", column: "created_by_id"
