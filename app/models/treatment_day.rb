@@ -1,0 +1,2 @@
+class TreatmentDay < ApplicationRecord
+end
