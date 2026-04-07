@@ -1,5 +1,6 @@
 class TimeSlot < ApplicationRecord
   belongs_to :treatment_day
+  has_many :reservations
 
   validates :start_time, :end_time, presence: true
   validate :start_time_must_be_before_end_time
