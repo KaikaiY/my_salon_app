@@ -9,6 +9,9 @@ class User < ApplicationRecord
   belongs_to :company, optional: true
   has_many :sent_invitations, class_name: "Invitation", foreign_key: :invited_by_id
   has_one :invitation, dependent: :nullify
+  has_many :created_treatment_days, class_name: "TreatmentDay", foreign_key: :created_by_id
+  has_many :assigned_treatment_days, class_name: "TreatmentDay", foreign_key: :therapist_id
+  has_many :reservations
 
   enum :role, {
     admin: 0,
