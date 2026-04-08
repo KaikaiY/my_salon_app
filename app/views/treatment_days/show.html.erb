@@ -1,0 +1,14 @@
+<h1>施術日詳細</h1>
+
+<p><%= link_to "施術日一覧ページへ", treatment_days_path %></p>
+
+<div class="treatment-day-show">
+  <div>施術日:<%= @treatment_day.date %></div>
+  <div>会社:<%= @treatment_day.company.company_name %></div>
+  <div>担当施術者:<%= @treatment_day.therapist&.name || "未割当" %></div>
+  <div>予約受付元:<%= @treatment_day.booking_source %></div>
+  <div>ステータス:<%= @treatment_day.status %></div>
+  <div>メモ:<%= @treatment_day.note %></div>
+</div>
+
+<%= link_to "施術日の編集", edit_treatment_day_path(@treatment_day), class: "treatment-day-edit" %>

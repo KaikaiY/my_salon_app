@@ -6,8 +6,12 @@
       <%= link_to '会社一覧ページへ', companies_path, class: "company-list"%>
       <%= link_to '招待管理ページへ', invitations_path, class: "invitation-list" %>
       <%= link_to '招待作成ページへ', new_invitation_path, class: "invitation-new" %>
+      <%= link_to '施術日一覧ページへ', treatment_days_path, class: "treatment-day-list" %>
+      <%= link_to '施術日登録ページへ', new_treatment_day_path, class: "treatment-day-new" %>
+    <% elsif current_user.company_manager? %>
+      <%= link_to '施術日一覧ページへ', treatment_days_path, class: "treatment-day-list" %>
+      <%= link_to '施術日登録ページへ', new_treatment_day_path, class: "treatment-day-new" %>
     <% end %>
   <% else %> 
     <p>ログインしていません</p>   
   <% end %> 
-

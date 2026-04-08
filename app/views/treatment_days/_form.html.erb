@@ -1,0 +1,47 @@
+<%= form_with model: treatment_day do |f| %>
+  <% if treatment_day.errors.any? %>
+    <div>
+      <ul>
+        <% treatment_day.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <p><%= f.label :date, "施術日" %></p>
+    <p><%= f.date_field :date %></p>
+  </div>
+
+  <% if current_user.admin? %>
+    <div>
+      <p><%= f.label :company_id, "会社" %></p>
+      <p><%= f.collection_select :company_id, Company.all, :id, :company_name, prompt: "選択してください" %></p>
+    </div>
+  <% end %>
+
+  <div>
+    <p><%= f.label :therapist_id, "担当施術者" %></p>
+    <p><%= f.collection_select :therapist_id, User.therapist, :id, :name, prompt: "未割当" %></p>
+  </div>
+
+  <div>
+    <p><%= f.label :booking_source, "予約受付元" %></p>
+    <p><%= f.select :booking_source, TreatmentDay.booking_sources.keys.map { |source| [source, source] }, prompt: "選択してください" %></p>
+  </div>
+
+  <div>
+    <p><%= f.label :status, "ステータス" %></p>
+    <p><%= f.select :status, TreatmentDay.statuses.keys.map { |status| [status, status] }, prompt: "選択してください" %></p>
+  </div>
+
+  <div>
+    <p><%= f.label :note, "メモ" %></p>
+    <p><%= f.text_area :note %></p>
+  </div>
+
+  <div>
+    <%= f.submit "保存する" %>
+  </div>
+<% end %>
