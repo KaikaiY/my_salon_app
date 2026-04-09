@@ -12,3 +12,22 @@
 </div>
 
 <%= link_to "施術日の編集", edit_treatment_day_path(@treatment_day), class: "treatment-day-edit" %>
+
+<p>
+  <%= link_to "時間枠を追加する", new_treatment_day_time_slot_path(@treatment_day) %>
+</p>
+
+<h2>時間枠一覧</h2>
+
+<% if @treatment_day.time_slots.any? %>
+  <ul>
+    <% @treatment_day.time_slots.each do |time_slot| %>
+      <li>
+        <span><%= time_slot.start_time.strftime("%H:%M") %> 〜 <%= time_slot.end_time.strftime("%H:%M") %></span>
+        <%= link_to "編集", edit_treatment_day_time_slot_path(@treatment_day, time_slot) %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>時間枠はまだ登録されていません。</p>
+<% end %>

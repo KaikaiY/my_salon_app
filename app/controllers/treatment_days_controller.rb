@@ -45,11 +45,6 @@ class TreatmentDaysController < ApplicationController
     @treatment_day = treatment_day_scope.find(params[:id])
   end
 
-  def treatment_day_scope
-    return TreatmentDay.all if current_user.admin?
-
-    TreatmentDay.where(company: current_user.company)
-  end
 
   def treatment_day_params
     permitted_params = params.require(:treatment_day).permit(:date, :booking_source, :status, :note, :company_id, :therapist_id)
@@ -64,9 +59,5 @@ class TreatmentDaysController < ApplicationController
     @treatment_day.company = current_user.company
   end
 
-  def ensure_treatment_day_manager!
-    return if current_user&.admin? || current_user&.company_manager?
-
-    redirect_to root_path, alert: "権限がありません"
-  end
+  
 end
