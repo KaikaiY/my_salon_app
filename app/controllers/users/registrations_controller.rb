@@ -23,7 +23,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
     build_resource(sign_up_params.except(:invitation_token))
     resource.email = @invitation.email
-    resource.company = @invitation.company
+    resource.company = @invitation.company if @invitation.company.present?
     resource.role = @invitation.role
     resource.active = false
 

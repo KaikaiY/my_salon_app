@@ -1,5 +1,5 @@
 class Invitation < ApplicationRecord
-  belongs_to :company
+  belongs_to :company, optional: true
   belongs_to :user, optional: true
   belongs_to :invited_by, class_name: "User"
 
@@ -30,7 +30,8 @@ class Invitation < ApplicationRecord
   validates :expires_at, presence: true
   validate :expires_at_in_future
   validate :admin_role_cannot_be_selected
-  
+  validates :company, presence: true, if: :company_required?
+
   
 
   scope :recent_first, -> { order(created_at: :desc) }
@@ -65,6 +66,10 @@ class Invitation < ApplicationRecord
     return unless admin?
 
     errors.add(:role, "は指定できません")
+  end
+
+  def company_required?
+    company_manager? || employee?
   end
 
   
