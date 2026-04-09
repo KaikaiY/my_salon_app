@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_04_07_044340) do
+ActiveRecord::Schema[7.1].define(version: 2026_04_09_064613) do
   create_table "companies", charset: "utf8mb3", force: :cascade do |t|
     t.string "company_name", null: false
     t.string "email", null: false
@@ -28,7 +28,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_04_07_044340) do
     t.datetime "expires_at", null: false
     t.datetime "accepted_at"
     t.datetime "approved_at"
-    t.bigint "company_id", null: false
+    t.bigint "company_id"
     t.bigint "user_id"
     t.bigint "invited_by_id", null: false
     t.datetime "created_at", null: false

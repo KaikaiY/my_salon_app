@@ -17,13 +17,13 @@
   </div>
 
   <div>
-    <p><%= f.label :company_id, "会社" %></p>
-    <p><%= f.collection_select :company_id, Company.all, :id, :company_name, prompt: "選択してください" %></p>
+    <p><%= f.label :role, "権限" %></p>
+    <p><%= f.select :role, Invitation.roles.keys.excluding("admin").map { |role| [role, role] }, prompt: "選択してください" %></p>
   </div>
 
   <div>
-    <p><%= f.label :role, "権限" %></p>
-    <p><%= f.select :role, Invitation.roles.keys.excluding("admin").map { |role| [role, role] }, prompt: "選択してください" %></p>
+    <p><%= f.label :company_id, "会社（company_manager / employee の場合のみ）" %></p>
+    <p><%= f.collection_select :company_id, Company.all, :id, :company_name, prompt: "選択してください" %></p>
   </div>
 
   <div>

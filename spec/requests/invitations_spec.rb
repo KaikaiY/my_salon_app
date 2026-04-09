@@ -81,6 +81,27 @@ RSpec.describe "Invitations", type: :request do
 
       expect(response).to redirect_to(invitations_path)
     end
+
+    it "管理者は therapist 招待を company なしで作成できること" do
+      admin = create(:user, :admin)
+      sign_in admin
+
+      expect do
+        post invitations_path, params: {
+          invitation: {
+            email: "therapist@example.com",
+            company_id: nil,
+            role: "therapist",
+            expires_at: 7.days.from_now
+          }
+        }
+      end.to change(Invitation, :count).by(1)
+
+      expect(response).to redirect_to(invitations_path)
+      expect(Invitation.last.role).to eq("therapist")
+      expect(Invitation.last.company).to be_nil
+    end
+
     it "管理者以外はトップにリダイレクトされること" do
       user = create(:user)
       sign_in user

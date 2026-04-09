@@ -17,7 +17,7 @@
     <% @invitations.each do |invitation| %>
       <tr>
         <td><%= invitation.email %></td>
-        <td><%= invitation.company.company_name %></td>
+        <td><%= invitation.company&.company_name || "未設定" %></td>
         <td><%= invitation.role %></td>
         <td><%= invitation.status %></td>
         <td><%= new_user_registration_url(invitation_token: invitation.token) %></td>

@@ -31,7 +31,25 @@ RSpec.describe User, type: :model do
 
       expect(user.errors[:password]).to be_present
     end
+    it 'therapist は company がなくても有効であること' do
+      user = FactoryBot.build(:user, role: :therapist, company: nil)
 
+      expect(user).to be_valid
+    end
+
+    it 'company_manager は company がないと無効であること' do
+      user = FactoryBot.build(:user, role: :company_manager, company: nil)
+      user.valid?
+
+      expect(user.errors[:company]).to be_present
+    end
+
+    it 'employee は company がないと無効であること' do
+      user = FactoryBot.build(:user, role: :employee, company: nil)
+      user.valid?
+
+      expect(user.errors[:company]).to be_present
+    end
     
   end
 

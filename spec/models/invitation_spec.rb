@@ -27,6 +27,27 @@ RSpec.describe Invitation, type: :model do
       expect(invitation.errors[:email]).to be_present
     end
 
+    it 'therapist は company がなくても有効であること' do
+      invitation = build(:invitation, role: :therapist, company: nil)
+
+      expect(invitation).to be_valid
+    end
+
+    it 'company_manager は company がないと無効であること' do
+      invitation = build(:invitation, role: :company_manager, company: nil)
+      invitation.valid?
+
+      expect(invitation.errors[:company]).to be_present
+    end
+
+    it 'employee は company がないと無効であること' do
+      invitation = build(:invitation, role: :employee, company: nil)
+      invitation.valid?
+
+      expect(invitation.errors[:company]).to be_present
+    end
+
+
   end
 
   describe '#available_for_signup?' do
