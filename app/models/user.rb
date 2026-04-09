@@ -5,6 +5,9 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   validates :name, :role, presence: true
+  validates :company, presence: true, if: :company_required?
+
+
 
   belongs_to :company, optional: true
   has_many :sent_invitations, class_name: "Invitation", foreign_key: :invited_by_id
@@ -27,4 +30,11 @@ class User < ApplicationRecord
   def inactive_message
     active? ? super : :inactive
   end
+
+  private
+
+  def company_required?
+    company_manager? || employee?
+  end
+
 end
