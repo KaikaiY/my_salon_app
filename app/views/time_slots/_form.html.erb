@@ -1,0 +1,29 @@
+<%= form_with model: [@treatment_day, @time_slot] do |f| %>
+  <% if @time_slot.errors.any? %>
+    <div>
+      <ul>
+        <% @time_slot.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <p>施術日: <%= @treatment_day.date %></p>
+  </div>
+
+  <div>
+    <p><%= f.label :start_time, "開始時刻" %></p>
+    <p><%= f.time_field :start_time %></p>
+  </div>
+
+  <div>
+    <p><%= f.label :end_time, "終了時刻" %></p>
+    <p><%= f.time_field :end_time %></p>
+  </div>
+
+  <div>
+    <%= f.submit "保存する" %>
+  </div>
+<% end %>
