@@ -2,6 +2,7 @@ class TimeSlotsController < ApplicationController
   before_action :authenticate_user!
   before_action :ensure_treatment_day_manager!, except: %i[index]
   before_action :set_treatment_day, except: %i[index]
+  before_action :ensure_treatment_day_active!, except: %i[index]
   before_action :set_time_slot, only: %i[edit update destroy]
 
   def index
@@ -99,7 +100,7 @@ class TimeSlotsController < ApplicationController
   end
 
   def time_slot_scope
-    scope = TimeSlot.joins(:treatment_day)
+    scope = TimeSlot.joins(:treatment_day).where.not(treatment_days: { status: TreatmentDay.statuses[:cancelled] })
 
     if current_user.admin?
       scope
@@ -126,6 +127,12 @@ class TimeSlotsController < ApplicationController
     @time_slot = @treatment_day.time_slots.find_by(id: params[:id])
 
     redirect_to treatment_day_path(@treatment_day), alert: "時間枠が見つかりません" unless @time_slot
+  end
+
+  def ensure_treatment_day_active!
+    return unless @treatment_day&.cancelled?
+
+    redirect_to treatment_day_path(@treatment_day), alert: "中止された施術日の時間枠は操作できません"
   end
 
   def time_slot_params

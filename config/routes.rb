@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   root "home#index"
   resources :companies
   resources :treatment_days, except: :destroy do
+    patch :cancel, on: :member
+
     resources :time_slots, only: %i[new create edit update destroy] do
       resources :reservations, only: %i[new create]
     end

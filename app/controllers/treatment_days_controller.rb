@@ -1,7 +1,7 @@
 class TreatmentDaysController < ApplicationController
   before_action :authenticate_user!
   before_action :ensure_treatment_day_manager!
-  before_action :set_treatment_day, only: %i[show edit update]
+  before_action :set_treatment_day, only: %i[show edit update cancel]
 
   def index
     @treatment_days = treatment_day_scope.includes(:company, :therapist).order(date: :desc)
@@ -39,10 +39,22 @@ class TreatmentDaysController < ApplicationController
     end
   end
 
+  def cancel
+    if @treatment_day.cancelled?
+      redirect_to treatment_day_path(@treatment_day), alert: "この施術日はすでに中止されています"
+    else
+      @treatment_day.update(status: :cancelled)
+      cancel_reserved_reservations
+      redirect_to treatment_day_path(@treatment_day), notice: "施術日を中止しました"
+    end
+  end
+
   private
 
   def set_treatment_day
-    @treatment_day = treatment_day_scope.find(params[:id])
+    @treatment_day = treatment_day_scope.find_by(id: params[:id])
+
+    redirect_to root_path, alert: "権限がありません" unless @treatment_day
   end
 
 
@@ -57,6 +69,14 @@ class TreatmentDaysController < ApplicationController
     return if current_user.admin?
 
     @treatment_day.company = current_user.company
+  end
+
+  def cancel_reserved_reservations
+    @treatment_day.time_slots.includes(:reservations).each do |time_slot|
+      time_slot.reservations.reserved.each do |reservation|
+        reservation.update(status: :cancelled)
+      end
+    end
   end
 
   

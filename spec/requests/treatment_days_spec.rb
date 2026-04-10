@@ -129,4 +129,80 @@ RSpec.describe "TreatmentDays", type: :request do
       expect(treatment_day.status).to eq("confirmed")
     end
   end
+
+  describe "PATCH /cancel" do
+    it "管理者は施術日を中止できること" do
+      admin = create(:user, :admin)
+      treatment_day = create(:treatment_day, status: :confirmed)
+      sign_in admin
+
+      patch cancel_treatment_day_path(treatment_day)
+
+      expect(response).to redirect_to(treatment_day_path(treatment_day))
+      expect(treatment_day.reload.status).to eq("cancelled")
+    end
+
+    it "会社責任者は自社の施術日を中止できること" do
+      manager = create(:user, :company_manager)
+      treatment_day = create(:treatment_day, company: manager.company, status: :confirmed)
+      sign_in manager
+
+      patch cancel_treatment_day_path(treatment_day)
+
+      expect(response).to redirect_to(treatment_day_path(treatment_day))
+      expect(treatment_day.reload.status).to eq("cancelled")
+    end
+
+    it "施術日を中止すると予約中の予約もキャンセルされること" do
+      admin = create(:user, :admin)
+      treatment_day = create(:treatment_day, status: :confirmed)
+      time_slot = create(:time_slot, treatment_day: treatment_day)
+      reservation = create(:reservation, time_slot: time_slot, status: :reserved)
+      sign_in admin
+
+      patch cancel_treatment_day_path(treatment_day)
+
+      expect(response).to redirect_to(treatment_day_path(treatment_day))
+      expect(treatment_day.reload.status).to eq("cancelled")
+      expect(reservation.reload.status).to eq("cancelled")
+      expect(time_slot.reload).to be_present
+    end
+
+    it "施術日を中止しても完了済みの予約は変更されないこと" do
+      admin = create(:user, :admin)
+      treatment_day = create(:treatment_day, status: :confirmed)
+      time_slot = create(:time_slot, treatment_day: treatment_day)
+      reservation = create(:reservation, time_slot: time_slot, status: :completed)
+      sign_in admin
+
+      patch cancel_treatment_day_path(treatment_day)
+
+      expect(response).to redirect_to(treatment_day_path(treatment_day))
+      expect(treatment_day.reload.status).to eq("cancelled")
+      expect(reservation.reload.status).to eq("completed")
+      expect(time_slot.reload).to be_present
+    end
+
+    it "会社責任者は他社の施術日を中止できないこと" do
+      manager = create(:user, :company_manager)
+      treatment_day = create(:treatment_day, status: :confirmed)
+      sign_in manager
+
+      patch cancel_treatment_day_path(treatment_day)
+
+      expect(response).to redirect_to(root_path)
+      expect(treatment_day.reload.status).to eq("confirmed")
+    end
+
+    it "利用者は施術日を中止できないこと" do
+      user = create(:user)
+      treatment_day = create(:treatment_day, status: :confirmed)
+      sign_in user
+
+      patch cancel_treatment_day_path(treatment_day)
+
+      expect(response).to redirect_to(root_path)
+      expect(treatment_day.reload.status).to eq("confirmed")
+    end
+  end
 end
