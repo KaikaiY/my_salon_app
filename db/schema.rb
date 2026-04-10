@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_04_09_064613) do
+ActiveRecord::Schema[7.1].define(version: 2026_04_10_060713) do
   create_table "companies", charset: "utf8mb3", force: :cascade do |t|
     t.string "company_name", null: false
     t.string "email", null: false
@@ -58,6 +58,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_04_09_064613) do
     t.bigint "treatment_day_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["treatment_day_id", "start_time", "end_time"], name: "index_time_slots_on_day_and_time_range", unique: true
     t.index ["treatment_day_id"], name: "index_time_slots_on_treatment_day_id"
   end
 

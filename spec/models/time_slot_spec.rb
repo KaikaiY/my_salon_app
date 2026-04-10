@@ -33,5 +33,21 @@ RSpec.describe TimeSlot, type: :model do
       expect(time_slot).to be_invalid
       expect(time_slot.errors[:treatment_day]).to be_present
     end
+
+    it '同じ施術日に同じ開始時刻と終了時刻の時間枠は登録できないこと' do
+      treatment_day = create(:treatment_day)
+      create(:time_slot, treatment_day: treatment_day, start_time: "10:00", end_time: "10:20")
+      time_slot = build(:time_slot, treatment_day: treatment_day, start_time: "10:00", end_time: "10:20")
+
+      expect(time_slot).to be_invalid
+      expect(time_slot.errors[:start_time]).to be_present
+    end
+
+    it '別の施術日なら同じ開始時刻と終了時刻でも登録できること' do
+      create(:time_slot, start_time: "10:00", end_time: "10:20")
+      time_slot = build(:time_slot, start_time: "10:00", end_time: "10:20")
+
+      expect(time_slot).to be_valid
+    end
   end
 end

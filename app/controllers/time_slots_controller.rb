@@ -22,7 +22,7 @@ class TimeSlotsController < ApplicationController
     if @time_slot.save
       redirect_to treatment_day_path(@treatment_day), notice: "時間枠を登録しました"
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -33,7 +33,7 @@ class TimeSlotsController < ApplicationController
     if @time_slot.update(time_slot_params)
       redirect_to treatment_day_path(@treatment_day), notice: "時間枠を更新しました"
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
@@ -52,7 +52,7 @@ class TimeSlotsController < ApplicationController
     @time_slot = @treatment_day.time_slots.new(time_slot_params)
 
     unless @time_slot.valid?
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
       return
     end
 
@@ -60,7 +60,7 @@ class TimeSlotsController < ApplicationController
 
     if time_slots.empty?
       @time_slot.errors.add(:base, "20分以上の時間を指定してください")
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
       return
     end
 
@@ -70,7 +70,7 @@ class TimeSlotsController < ApplicationController
 
     redirect_to treatment_day_path(@treatment_day), notice: "#{time_slots.count}件の時間枠を登録しました"
   rescue ActiveRecord::RecordInvalid
-    render :new, status: :unprocessable_entity
+    render :new, status: :unprocessable_content
   end
 
   def build_bulk_time_slots
