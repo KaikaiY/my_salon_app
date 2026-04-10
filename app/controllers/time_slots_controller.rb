@@ -2,7 +2,7 @@ class TimeSlotsController < ApplicationController
   before_action :authenticate_user!
   before_action :ensure_treatment_day_manager!, except: %i[index]
   before_action :set_treatment_day, except: %i[index]
-  before_action :set_time_slot, only: %i[edit update]
+  before_action :set_time_slot, only: %i[edit update destroy]
 
   def index
     @time_slots = time_slot_scope.includes(treatment_day: %i[company therapist]).order("treatment_days.date ASC", :start_time)
@@ -34,6 +34,15 @@ class TimeSlotsController < ApplicationController
       redirect_to treatment_day_path(@treatment_day), notice: "時間枠を更新しました"
     else
       render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    if @time_slot.reservations.exists?
+      redirect_to treatment_day_path(@treatment_day), alert: "予約履歴がある時間枠は削除できません"
+    else
+      @time_slot.destroy
+      redirect_to treatment_day_path(@treatment_day), notice: "時間枠を削除しました"
     end
   end
 
@@ -108,11 +117,15 @@ class TimeSlotsController < ApplicationController
   end
 
   def set_treatment_day
-    @treatment_day = treatment_day_scope.find(params[:treatment_day_id])
+    @treatment_day = treatment_day_scope.find_by(id: params[:treatment_day_id])
+
+    redirect_to root_path, alert: "権限がありません" unless @treatment_day
   end
 
   def set_time_slot
-    @time_slot = @treatment_day.time_slots.find(params[:id])
+    @time_slot = @treatment_day.time_slots.find_by(id: params[:id])
+
+    redirect_to treatment_day_path(@treatment_day), alert: "時間枠が見つかりません" unless @time_slot
   end
 
   def time_slot_params
