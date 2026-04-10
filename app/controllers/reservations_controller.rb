@@ -2,7 +2,7 @@ class ReservationsController < ApplicationController
   before_action :authenticate_user!
   before_action :ensure_employee!, only: %i[new create]
   before_action :set_time_slot, only: %i[new create]
-  before_action :set_reservation, only: %i[show]
+  before_action :set_reservation, only: %i[show cancel]
 
   def index
     @reservations = reservation_scope.includes(:user, time_slot: :treatment_day).order(created_at: :desc)
@@ -22,6 +22,15 @@ class ReservationsController < ApplicationController
       redirect_to reservation_path(@reservation), notice: "予約しました"
     else
       render :new, status: :unprocessable_content
+    end
+  end
+
+  def cancel
+    if @reservation.reserved?
+      @reservation.update(status: :cancelled)
+      redirect_to reservation_path(@reservation), notice: "予約をキャンセルしました"
+    else
+      redirect_to reservation_path(@reservation), alert: "この予約はキャンセルできません"
     end
   end
 

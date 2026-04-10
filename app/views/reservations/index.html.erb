@@ -22,6 +22,16 @@
           </td>
           <td><%= reservation.user.name %></td>
           <td><%= reservation.status %></td>
+          <td>
+            <% if reservation.reserved? %>
+              <%= link_to "キャンセルする",
+                          cancel_reservation_path(reservation),
+                          data: {
+                            turbo_method: :patch,
+                            turbo_confirm: "この予約をキャンセルしますか？"
+                          } %>
+            <% end %>
+          </td>
           <td><%= link_to "詳細", reservation_path(reservation) %></td>
         </tr>
       <% end %>

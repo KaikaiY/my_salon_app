@@ -132,4 +132,61 @@ RSpec.describe "Reservations", type: :request do
       expect(response).to redirect_to(reservations_path)
     end
   end
+
+  describe "PATCH /cancel" do
+    it "利用者は自分の予約をキャンセルできること" do
+      reservation = create(:reservation, user: employee, time_slot: time_slot)
+      sign_in employee
+
+      expect do
+        patch cancel_reservation_path(reservation)
+      end.not_to change(Reservation, :count)
+
+      expect(response).to redirect_to(reservation_path(reservation))
+      expect(reservation.reload.status).to eq("cancelled")
+    end
+
+    it "利用者は他人の予約をキャンセルできないこと" do
+      other_employee = create(:user, company: company)
+      reservation = create(:reservation, user: other_employee, time_slot: time_slot)
+      sign_in employee
+
+      expect do
+        patch cancel_reservation_path(reservation)
+      end.not_to change(Reservation, :count)
+
+      expect(response).to redirect_to(reservations_path)
+      expect(reservation.reload.status).to eq("reserved")
+    end
+
+    it "キャンセル済みの予約はキャンセルできないこと" do
+      reservation = create(:reservation, :cancelled, user: employee, time_slot: time_slot)
+      sign_in employee
+
+      patch cancel_reservation_path(reservation)
+
+      expect(response).to redirect_to(reservation_path(reservation))
+      expect(reservation.reload.status).to eq("cancelled")
+    end
+
+    it "キャンセル済みの予約は予約可能枠に戻ること" do
+      create(:reservation, :cancelled, time_slot: time_slot)
+      sign_in employee
+
+      expect do
+         post treatment_day_time_slot_reservations_path(treatment_day, time_slot), params: {
+          reservation: {
+            note: "肩こりが気になります"
+          }
+        }
+      end.to change(Reservation, :count).by(1)
+
+      reservation = Reservation.last
+      expect(response).to redirect_to(reservation_path(reservation))
+      expect(reservation.user).to eq(employee)
+      expect(reservation.time_slot).to eq(time_slot)
+      expect(reservation.status).to eq("reserved")
+      expect(reservation.note).to eq("肩こりが気になります")
+    end
+  end
 end
