@@ -12,7 +12,9 @@ Rails.application.routes.draw do
     end
   end
   resources :time_slots, only: %i[index]
-  resources :reservations, only: %i[index show]
+  resources :reservations, only: %i[index show] do
+    patch :cancel, on: :member
+  end
   resources :invitations, only: %i[index new create] do
     patch :approve, on: :member
   end
