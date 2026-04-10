@@ -155,6 +155,36 @@ RSpec.describe "TimeSlots", type: :request do
       expect(treatment_day.time_slots.order(:start_time).map { |slot| slot.end_time.strftime("%H:%M") }).to eq(%w[13:20 13:40 14:00])
     end
 
+    it "同じ施術日に重複する時間枠は作成できないこと" do
+      admin = create(:user, :admin)
+      create(:time_slot, treatment_day: treatment_day, start_time: "10:00", end_time: "11:00")
+      sign_in admin
+
+      expect do
+        post treatment_day_time_slots_path(treatment_day), params: valid_params
+      end.not_to change(TimeSlot, :count)
+
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+
+    it "一括作成で重複する時間枠がある場合は作成できないこと" do
+      admin = create(:user, :admin)
+      create(:time_slot, treatment_day: treatment_day, start_time: "10:20", end_time: "10:40")
+      sign_in admin
+
+      expect do
+        post treatment_day_time_slots_path(treatment_day), params: {
+          time_slot: {
+            start_time: "10:00",
+            end_time: "11:00",
+            bulk_create: "1"
+          }
+        }
+      end.not_to change(TimeSlot, :count)
+
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+
     it "利用者は時間枠を作成できないこと" do
       user = create(:user)
       sign_in user
