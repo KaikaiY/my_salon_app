@@ -14,6 +14,47 @@ RSpec.describe "TimeSlots", type: :request do
     }
   end
 
+  describe "GET /index" do
+    it "未ログインだとログイン画面にリダイレクトされること" do
+      get time_slots_path
+
+      expect(response).to redirect_to(new_user_session_path)
+    end
+
+    it "利用者は予約可能枠一覧にアクセスできること" do
+      user = create(:user, company: company)
+      time_slot
+      sign_in user
+
+      get time_slots_path
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("この時間を予約する")
+    end
+
+    it "利用者には予約済みの時間枠が表示されないこと" do
+      user = create(:user, company: company)
+      create(:reservation, time_slot: time_slot)
+      sign_in user
+
+      get time_slots_path
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).not_to include(time_slot.start_time.strftime("%H:%M"))
+    end
+
+    it "利用者には他社の時間枠が表示されないこと" do
+      user = create(:user, company: company)
+      other_time_slot = create(:time_slot)
+      sign_in user
+
+      get time_slots_path
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).not_to include(other_time_slot.treatment_day.company.company_name)
+    end
+  end
+
   describe "GET /new" do
     it "未ログインだとログイン画面にリダイレクトされること" do
       get new_treatment_day_time_slot_path(treatment_day)
@@ -74,6 +115,44 @@ RSpec.describe "TimeSlots", type: :request do
       expect(treatment_day.time_slots.first.treatment_day).to eq(treatment_day)
       expect(treatment_day.time_slots.first.reservations.count).to eq(0)
 
+    end
+
+    it "管理者は20分ごとに時間枠をまとめて作成できること" do
+      admin = create(:user, :admin)
+      sign_in admin
+
+      expect do
+        post treatment_day_time_slots_path(treatment_day), params: {
+          time_slot: {
+            start_time: "10:00",
+            end_time: "11:00",
+            bulk_create: "1"
+          }
+        }
+      end.to change(TimeSlot, :count).by(3)
+
+      expect(response).to redirect_to(treatment_day_path(treatment_day))
+      expect(treatment_day.time_slots.order(:start_time).map { |slot| slot.start_time.strftime("%H:%M") }).to eq(%w[10:00 10:20 10:40])
+      expect(treatment_day.time_slots.order(:start_time).map { |slot| slot.end_time.strftime("%H:%M") }).to eq(%w[10:20 10:40 11:00])
+    end
+
+    it "会社責任者は20分ごとに時間枠をまとめて作成できること" do
+      manager = create(:user, :company_manager, company: company)
+      sign_in manager
+
+      expect do
+        post treatment_day_time_slots_path(treatment_day), params: {
+          time_slot: {
+            start_time: "13:00",
+            end_time: "14:00",
+            bulk_create: "1"
+          }
+        }
+      end.to change(TimeSlot, :count).by(3)
+
+      expect(response).to redirect_to(treatment_day_path(treatment_day))
+      expect(treatment_day.time_slots.order(:start_time).map { |slot| slot.start_time.strftime("%H:%M") }).to eq(%w[13:00 13:20 13:40])
+      expect(treatment_day.time_slots.order(:start_time).map { |slot| slot.end_time.strftime("%H:%M") }).to eq(%w[13:20 13:40 14:00])
     end
 
     it "利用者は時間枠を作成できないこと" do

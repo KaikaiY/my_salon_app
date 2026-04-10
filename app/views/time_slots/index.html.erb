@@ -1,0 +1,38 @@
+<h1>予約可能枠一覧</h1>
+
+<% if @time_slots.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>施術日</th>
+        <th>会社</th>
+        <th>担当施術者</th>
+        <th>時間</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @time_slots.each do |time_slot| %>
+        <tr>
+          <td><%= time_slot.treatment_day.date %></td>
+          <td><%= time_slot.treatment_day.company.company_name %></td>
+          <td><%= time_slot.treatment_day.therapist&.name || "未割当" %></td>
+          <td>
+            <%= time_slot.start_time.strftime("%H:%M") %>
+            -
+            <%= time_slot.end_time.strftime("%H:%M") %>
+          </td>
+          <td>
+            <% if current_user.employee? %>
+              <%= link_to "この時間を予約する", new_treatment_day_time_slot_reservation_path(time_slot.treatment_day, time_slot) %>
+            <% else %>
+              <%= link_to "施術日詳細", treatment_day_path(time_slot.treatment_day) %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>表示できる時間枠はありません。</p>
+<% end %>

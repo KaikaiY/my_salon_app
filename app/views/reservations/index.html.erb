@@ -1,0 +1,32 @@
+<h1>予約一覧</h1>
+
+<% if @reservations.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>施術日</th>
+        <th>時間</th>
+        <th>利用者</th>
+        <th>ステータス</th>
+        <th>詳細</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @reservations.each do |reservation| %>
+        <tr>
+          <td><%= reservation.time_slot.treatment_day.date %></td>
+          <td>
+            <%= reservation.time_slot.start_time.strftime("%H:%M") %>
+            -
+            <%= reservation.time_slot.end_time.strftime("%H:%M") %>
+          </td>
+          <td><%= reservation.user.name %></td>
+          <td><%= reservation.status %></td>
+          <td><%= link_to "詳細", reservation_path(reservation) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>予約はまだありません。</p>
+<% end %>
