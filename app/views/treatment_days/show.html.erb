@@ -25,6 +25,16 @@
       <li>
         <span><%= time_slot.start_time.strftime("%H:%M") %> 〜 <%= time_slot.end_time.strftime("%H:%M") %></span>
         <%= link_to "編集", edit_treatment_day_time_slot_path(@treatment_day, time_slot) %>
+        <% if time_slot.reservations.exists? %>
+          <span>予約履歴あり</span>
+        <% else %>
+          <%= link_to "削除",
+                      treatment_day_time_slot_path(@treatment_day, time_slot),
+                      data: {
+                        turbo_method: :delete,
+                        turbo_confirm: "この時間枠を削除しますか？"
+                      } %>
+        <% end %>
       </li>
     <% end %>
   </ul>

@@ -248,4 +248,65 @@ RSpec.describe "TimeSlots", type: :request do
       expect(time_slot.end_time).to eq(original_end_time)
     end
   end
+
+  describe "DELETE /destroy" do
+    it "管理者は予約履歴がない時間枠を削除できること" do
+      admin = create(:user, :admin)
+      time_slot
+      sign_in admin
+
+      expect do
+        delete treatment_day_time_slot_path(treatment_day, time_slot)
+      end.to change(TimeSlot, :count).by(-1)
+
+      expect(response).to redirect_to(treatment_day_path(treatment_day))
+    end
+
+    it "会社責任者は自社の予約履歴がない時間枠を削除できること" do
+      manager = create(:user, :company_manager, company: company)
+      time_slot
+      sign_in manager
+
+      expect do
+        delete treatment_day_time_slot_path(treatment_day, time_slot)
+      end.to change(TimeSlot, :count).by(-1)
+
+      expect(response).to redirect_to(treatment_day_path(treatment_day))
+    end
+
+    it "会社責任者は他社の時間枠を削除できないこと" do
+      other_treatment_day = create(:treatment_day)
+      other_time_slot = create(:time_slot, treatment_day: other_treatment_day)
+      manager = create(:user, :company_manager, company: company)
+      sign_in manager
+
+      expect do
+        delete treatment_day_time_slot_path(other_treatment_day, other_time_slot)
+      end.not_to change(TimeSlot, :count)
+    end
+
+    it "利用者は時間枠を削除できないこと" do
+      user = create(:user, company: company)
+      time_slot
+      sign_in user
+
+      expect do
+        delete treatment_day_time_slot_path(treatment_day, time_slot)
+      end.not_to change(TimeSlot, :count)
+
+      expect(response).to redirect_to(root_path)
+    end
+
+    it "予約履歴がある時間枠は削除できないこと" do
+      admin = create(:user, :admin)
+      create(:reservation, time_slot: time_slot)
+      sign_in admin
+
+      expect do
+        delete treatment_day_time_slot_path(treatment_day, time_slot)
+      end.not_to change(TimeSlot, :count)
+
+      expect(response).to redirect_to(treatment_day_path(treatment_day))
+    end
+  end
 end
