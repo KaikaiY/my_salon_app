@@ -13,9 +13,22 @@
 
 <%= link_to "施術日の編集", edit_treatment_day_path(@treatment_day), class: "treatment-day-edit" %>
 
-<p>
-  <%= link_to "時間枠を追加する", new_treatment_day_time_slot_path(@treatment_day) %>
-</p>
+<% if @treatment_day.cancelled? %>
+  <p>この施術日は中止されています。時間枠は履歴確認のため表示されています。</p>
+<% else %>
+  <p>
+    <%= link_to "施術日を中止する",
+                cancel_treatment_day_path(@treatment_day),
+                data: {
+                  turbo_method: :patch,
+                  turbo_confirm: "この施術日を中止しますか？"
+                } %>
+  </p>
+
+  <p>
+    <%= link_to "時間枠を追加する", new_treatment_day_time_slot_path(@treatment_day) %>
+  </p>
+<% end %>
 
 <h2>時間枠一覧</h2>
 
@@ -24,10 +37,15 @@
     <% @treatment_day.time_slots.each do |time_slot| %>
       <li>
         <span><%= time_slot.start_time.strftime("%H:%M") %> 〜 <%= time_slot.end_time.strftime("%H:%M") %></span>
-        <%= link_to "編集", edit_treatment_day_time_slot_path(@treatment_day, time_slot) %>
+        <% if @treatment_day.cancelled? %>
+          <span>操作不可</span>
+        <% else %>
+          <%= link_to "編集", edit_treatment_day_time_slot_path(@treatment_day, time_slot) %>
+        <% end %>
+
         <% if time_slot.reservations.exists? %>
           <span>予約履歴あり</span>
-        <% else %>
+        <% elsif !@treatment_day.cancelled? %>
           <%= link_to "削除",
                       treatment_day_time_slot_path(@treatment_day, time_slot),
                       data: {
