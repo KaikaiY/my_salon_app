@@ -6,9 +6,11 @@
       <tr>
         <th>施術日</th>
         <th>時間</th>
+        <th>会社</th>
+        <th>担当施術者</th>
         <th>利用者</th>
         <th>ステータス</th>
-        <th>詳細</th>
+        <th>操作</th>
       </tr>
     </thead>
     <tbody>
@@ -20,10 +22,14 @@
             -
             <%= reservation.time_slot.end_time.strftime("%H:%M") %>
           </td>
+          <td><%= reservation.time_slot.treatment_day.company.company_name %></td>
+          <td><%= reservation.time_slot.treatment_day.therapist&.name || "未割当" %></td>
           <td><%= reservation.user.name %></td>
           <td><%= reservation.human_status %></td>
           <td>
+            <%= link_to "詳細", reservation_path(reservation) %>
             <% if reservation.reserved? %>
+              |
               <%= link_to "キャンセルする",
                           cancel_reservation_path(reservation),
                           data: {
@@ -32,11 +38,10 @@
                           } %>
             <% end %>
           </td>
-          <td><%= link_to "詳細", reservation_path(reservation) %></td>
         </tr>
       <% end %>
     </tbody>
   </table>
 <% else %>
-  <p>予約はまだありません。</p>
+  <p>表示できる予約はまだありません。</p>
 <% end %>

@@ -7,9 +7,16 @@
   -
   <%= @reservation.time_slot.end_time.strftime("%H:%M") %>
 </p>
+<p>会社: <%= @reservation.time_slot.treatment_day.company.company_name %></p>
+<p>担当施術者: <%= @reservation.time_slot.treatment_day.therapist&.name || "未割当" %></p>
 <p>利用者: <%= @reservation.user.name %></p>
 <p>ステータス: <%= @reservation.human_status %></p>
 <p>メモ: <%= @reservation.note.presence || "なし" %></p>
+
+<% if @reservation.time_slot.treatment_day.cancelled? %>
+  <p>この予約の施術日は中止されています。</p>
+<% end %>
+
 <% if @reservation.reserved? %>
   <p>
     <%= link_to "キャンセルする",
