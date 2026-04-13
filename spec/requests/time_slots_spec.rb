@@ -65,6 +65,19 @@ RSpec.describe "TimeSlots", type: :request do
       expect(response).to have_http_status(:ok)
       expect(response.body).not_to include(time_slot.start_time.strftime("%H:%M"))
     end
+
+    it "再開された施術日の時間枠は再び表示されること" do
+      user = create(:user, company: company)
+      treatment_day.update(status: :cancelled)
+      time_slot
+      treatment_day.update(status: :pending)
+      sign_in user
+
+      get time_slots_path
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include(time_slot.start_time.strftime("%H:%M"))
+    end
   end
 
   describe "GET /new" do
