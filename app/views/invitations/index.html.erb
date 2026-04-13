@@ -18,8 +18,8 @@
       <tr>
         <td><%= invitation.email %></td>
         <td><%= invitation.company&.company_name || "未設定" %></td>
-        <td><%= invitation.role %></td>
-        <td><%= invitation.status %></td>
+        <td><%= invitation.human_role %></td>
+        <td><%= invitation.human_status %></td>
         <td><%= new_user_registration_url(invitation_token: invitation.token) %></td>
         <td>
           <% if invitation.accepted? && invitation.user.present? %>

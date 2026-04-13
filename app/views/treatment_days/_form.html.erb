@@ -28,12 +28,12 @@
 
   <div>
     <p><%= f.label :booking_source, "予約受付元" %></p>
-    <p><%= f.select :booking_source, TreatmentDay.booking_sources.keys.map { |source| [source, source] }, prompt: "選択してください" %></p>
+    <p><%= f.select :booking_source, TreatmentDay.booking_source_options, prompt: "選択してください" %></p>
   </div>
 
   <div>
     <p><%= f.label :status, "ステータス" %></p>
-    <p><%= f.select :status, TreatmentDay.statuses.keys.map { |status| [status, status] }, prompt: "選択してください" %></p>
+    <p><%= f.select :status, TreatmentDay.status_options, prompt: "選択してください" %></p>
   </div>
 
   <div>

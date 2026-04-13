@@ -1,4 +1,11 @@
 class User < ApplicationRecord
+  ROLE_LABELS = {
+    admin: "管理者",
+    therapist: "施術者",
+    company_manager: "会社責任者",
+    employee: "利用者"
+  }.freeze
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -29,6 +36,10 @@ class User < ApplicationRecord
 
   def inactive_message
     active? ? super : :inactive
+  end
+
+  def human_role
+    ROLE_LABELS[role.to_sym]
   end
 
   private
