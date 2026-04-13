@@ -72,6 +72,110 @@ RSpec.describe "TreatmentDays", type: :request do
     end
   end
 
+  describe "GET /show" do
+    it "管理者は施術日詳細を見られること" do
+      admin = create(:user, :admin)
+      treatment_day = create(:treatment_day, note: "管理者確認用")
+      sign_in admin
+
+      get treatment_day_path(treatment_day)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("管理者確認用")
+    end
+
+    it "会社責任者は自社の施術日詳細を見られること" do
+      manager = create(:user, :company_manager)
+      treatment_day = create(:treatment_day, company: manager.company, note: "自社施術日詳細")
+      sign_in manager
+
+      get treatment_day_path(treatment_day)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("自社施術日詳細")
+    end
+
+    it "会社責任者は他社の施術日詳細を見られないこと" do
+      manager = create(:user, :company_manager)
+      treatment_day = create(:treatment_day, note: "他社施術日詳細")
+      sign_in manager
+
+      get treatment_day_path(treatment_day)
+
+      expect(response).to redirect_to(root_path)
+    end
+
+    it "施術者は施術日詳細を見られないこと" do
+      treatment_day = create(:treatment_day, note: "施術日詳細")
+      sign_in therapist
+
+      get treatment_day_path(treatment_day)
+
+      expect(response).to redirect_to(root_path)
+    end
+
+    it "利用者は施術日詳細を見られないこと" do
+      user = create(:user)
+      treatment_day = create(:treatment_day, note: "施術日詳細")
+      sign_in user
+
+      get treatment_day_path(treatment_day)
+
+      expect(response).to redirect_to(root_path)
+    end
+  end
+
+  describe "GET /edit" do
+    it "管理者は編集画面にアクセスできること" do
+      admin = create(:user, :admin)
+      treatment_day = create(:treatment_day)
+      sign_in admin
+
+      get edit_treatment_day_path(treatment_day)
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "会社責任者は自社の編集画面にアクセスできること" do
+      manager = create(:user, :company_manager)
+      treatment_day = create(:treatment_day, company: manager.company)
+      sign_in manager
+
+      get edit_treatment_day_path(treatment_day)
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "会社責任者は他社の編集画面にアクセスできないこと" do
+      manager = create(:user, :company_manager)
+      treatment_day = create(:treatment_day)
+      sign_in manager
+
+      get edit_treatment_day_path(treatment_day)
+
+      expect(response).to redirect_to(root_path)
+    end
+
+    it "施術者は編集画面にアクセスできないこと" do
+      treatment_day = create(:treatment_day)
+      sign_in therapist
+
+      get edit_treatment_day_path(treatment_day)
+
+      expect(response).to redirect_to(root_path)
+    end
+
+    it "利用者は編集画面にアクセスできないこと" do
+      user = create(:user)
+      treatment_day = create(:treatment_day)
+      sign_in user
+
+      get edit_treatment_day_path(treatment_day)
+
+      expect(response).to redirect_to(root_path)
+    end
+  end
+
   describe "POST /create" do
     it "管理者は施術日を作成できること" do
       admin = create(:user, :admin)
@@ -127,6 +231,97 @@ RSpec.describe "TreatmentDays", type: :request do
       expect(treatment_day.reload.date).to eq(Date.tomorrow)
       expect(treatment_day.booking_source).to eq("phone")
       expect(treatment_day.status).to eq("confirmed")
+    end
+
+    it "会社責任者は自社の施術日を更新できること" do
+      manager = create(:user, :company_manager)
+      treatment_day = create(:treatment_day, company: manager.company)
+      sign_in manager
+
+      patch treatment_day_path(treatment_day), params: {
+        treatment_day: {
+          date: Date.tomorrow,
+          booking_source: "phone",
+          status: "confirmed",
+          note: "会社責任者更新後メモ",
+          company_id: company.id
+        }
+      }
+
+      expect(response).to redirect_to(treatment_day_path(treatment_day))
+      expect(treatment_day.reload.date).to eq(Date.tomorrow)
+      expect(treatment_day.booking_source).to eq("phone")
+      expect(treatment_day.status).to eq("confirmed")
+      expect(treatment_day.note).to eq("会社責任者更新後メモ")
+      expect(treatment_day.company).to eq(manager.company)
+    end
+
+    it "会社責任者は他社の施術日を更新できないこと" do
+      manager = create(:user, :company_manager)
+      treatment_day = create(:treatment_day)
+      original_date = treatment_day.date
+      original_booking_source = treatment_day.booking_source
+      original_status = treatment_day.status
+      sign_in manager
+
+      patch treatment_day_path(treatment_day), params: {
+        treatment_day: {
+          date: Date.tomorrow,
+          booking_source: "phone",
+          status: "confirmed",
+          note: "更新不可テスト"
+        }
+      }
+
+      expect(response).to redirect_to(root_path)
+      expect(treatment_day.reload.date).to eq(original_date)
+      expect(treatment_day.booking_source).to eq(original_booking_source)
+      expect(treatment_day.status).to eq(original_status)
+    end
+
+    it "施術者は施術日を更新できないこと" do
+      treatment_day = create(:treatment_day)
+      original_date = treatment_day.date
+      original_booking_source = treatment_day.booking_source
+      original_status = treatment_day.status
+      sign_in therapist
+
+      patch treatment_day_path(treatment_day), params: {
+        treatment_day: {
+          date: Date.tomorrow,
+          booking_source: "phone",
+          status: "confirmed",
+          note: "施術者更新不可"
+        }
+      }
+
+      expect(response).to redirect_to(root_path)
+      expect(treatment_day.reload.date).to eq(original_date)
+      expect(treatment_day.booking_source).to eq(original_booking_source)
+      expect(treatment_day.status).to eq(original_status)
+    end
+
+    it "利用者は施術日を更新できないこと" do
+      user = create(:user)
+      treatment_day = create(:treatment_day)
+      original_date = treatment_day.date
+      original_booking_source = treatment_day.booking_source
+      original_status = treatment_day.status
+      sign_in user
+
+      patch treatment_day_path(treatment_day), params: {
+        treatment_day: {
+          date: Date.tomorrow,
+          booking_source: "phone",
+          status: "confirmed",
+          note: "利用者更新不可"
+        }
+      }
+
+      expect(response).to redirect_to(root_path)
+      expect(treatment_day.reload.date).to eq(original_date)
+      expect(treatment_day.booking_source).to eq(original_booking_source)
+      expect(treatment_day.status).to eq(original_status)
     end
   end
 

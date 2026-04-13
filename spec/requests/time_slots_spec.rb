@@ -78,6 +78,30 @@ RSpec.describe "TimeSlots", type: :request do
       expect(response).to have_http_status(:ok)
       expect(response.body).to include(time_slot.start_time.strftime("%H:%M"))
     end
+
+    it "施術者は担当施術日の時間枠一覧を見られること" do
+      therapist = create(:user, :therapist)
+      treatment_day.update(therapist: therapist)
+      time_slot
+      sign_in therapist
+
+      get time_slots_path
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include(time_slot.start_time.strftime("%H:%M"))
+    end
+
+    it "施術者には担当外の時間枠が表示されないこと" do
+      therapist = create(:user, :therapist)
+      other_treatment_day = create(:treatment_day)
+      other_time_slot = create(:time_slot, treatment_day: other_treatment_day)
+      sign_in therapist
+
+      get time_slots_path
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).not_to include(other_time_slot.start_time.strftime("%H:%M"))
+    end
   end
 
   describe "GET /new" do
@@ -117,6 +141,15 @@ RSpec.describe "TimeSlots", type: :request do
     it "利用者はトップにリダイレクトされること" do
       user = create(:user)
       sign_in user
+
+      get new_treatment_day_time_slot_path(treatment_day)
+
+      expect(response).to redirect_to(root_path)
+    end
+
+    it "施術者は時間枠登録画面にアクセスできないこと" do
+      therapist = create(:user, :therapist)
+      sign_in therapist
 
       get new_treatment_day_time_slot_path(treatment_day)
 
@@ -242,6 +275,17 @@ RSpec.describe "TimeSlots", type: :request do
 
       expect(response).to redirect_to(treatment_day_path(treatment_day))
     end
+
+    it "施術者は時間枠を作成できないこと" do
+      therapist = create(:user, :therapist)
+      sign_in therapist
+
+      expect do
+        post treatment_day_time_slots_path(treatment_day), params: valid_params
+      end.not_to change(TimeSlot, :count)
+
+      expect(response).to redirect_to(root_path)
+    end
   end
 
   describe "GET /edit" do
@@ -263,6 +307,17 @@ RSpec.describe "TimeSlots", type: :request do
     
     end
 
+    it "会社責任者は他社の時間枠編集画面にアクセスできないこと" do
+      other_treatment_day = create(:treatment_day)
+      other_time_slot = create(:time_slot, treatment_day: other_treatment_day)
+      manager = create(:user, :company_manager, company: company)
+      sign_in manager
+
+      get edit_treatment_day_time_slot_path(other_treatment_day, other_time_slot)
+
+      expect(response).to redirect_to(root_path)
+    end
+
     it "中止された施術日の時間枠編集画面にはアクセスできないこと" do
       admin = create(:user, :admin)
       treatment_day.update(status: :cancelled)
@@ -278,6 +333,15 @@ RSpec.describe "TimeSlots", type: :request do
       sign_in user
 
       get edit_treatment_day_time_slot_path(treatment_day, time_slot)
+      expect(response).to redirect_to(root_path)
+    end
+
+    it "施術者は時間枠編集画面にアクセスできないこと" do
+      therapist = create(:user, :therapist)
+      sign_in therapist
+
+      get edit_treatment_day_time_slot_path(treatment_day, time_slot)
+
       expect(response).to redirect_to(root_path)
     end
   end
@@ -353,6 +417,44 @@ RSpec.describe "TimeSlots", type: :request do
       expect(time_slot.reload.start_time).to eq(original_start_time)
       expect(time_slot.end_time).to eq(original_end_time)
     end
+
+    it "会社責任者は他社の時間枠を更新できないこと" do
+      other_treatment_day = create(:treatment_day)
+      other_time_slot = create(:time_slot, treatment_day: other_treatment_day)
+      original_start_time = other_time_slot.start_time
+      original_end_time = other_time_slot.end_time
+      manager = create(:user, :company_manager, company: company)
+      sign_in manager
+
+      patch treatment_day_time_slot_path(other_treatment_day, other_time_slot), params: {
+        time_slot: {
+          start_time: "12:00",
+          end_time: "13:00"
+        }
+      }
+
+      expect(response).to redirect_to(root_path)
+      expect(other_time_slot.reload.start_time).to eq(original_start_time)
+      expect(other_time_slot.end_time).to eq(original_end_time)
+    end
+
+    it "施術者は時間枠を更新できないこと" do
+      therapist = create(:user, :therapist)
+      original_start_time = time_slot.start_time
+      original_end_time = time_slot.end_time
+      sign_in therapist
+
+      patch treatment_day_time_slot_path(treatment_day, time_slot), params: {
+        time_slot: {
+          start_time: "12:00",
+          end_time: "13:00"
+        }
+      }
+
+      expect(response).to redirect_to(root_path)
+      expect(time_slot.reload.start_time).to eq(original_start_time)
+      expect(time_slot.end_time).to eq(original_end_time)
+    end
   end
 
   describe "DELETE /destroy" do
@@ -395,6 +497,31 @@ RSpec.describe "TimeSlots", type: :request do
       user = create(:user, company: company)
       time_slot
       sign_in user
+
+      expect do
+        delete treatment_day_time_slot_path(treatment_day, time_slot)
+      end.not_to change(TimeSlot, :count)
+
+      expect(response).to redirect_to(root_path)
+    end
+
+    it "会社責任者は他社の時間枠を削除できないこと" do
+      other_treatment_day = create(:treatment_day)
+      other_time_slot = create(:time_slot, treatment_day: other_treatment_day)
+      manager = create(:user, :company_manager, company: company)
+      sign_in manager
+
+      expect do
+        delete treatment_day_time_slot_path(other_treatment_day, other_time_slot)
+      end.not_to change(TimeSlot, :count)
+
+      expect(response).to redirect_to(root_path)
+    end
+
+    it "施術者は時間枠を削除できないこと" do
+      time_slot
+      therapist = create(:user, :therapist)
+      sign_in therapist
 
       expect do
         delete treatment_day_time_slot_path(treatment_day, time_slot)
