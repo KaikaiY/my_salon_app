@@ -1,4 +1,18 @@
 class Invitation < ApplicationRecord
+  ROLE_LABELS = {
+    admin: "管理者",
+    therapist: "施術者",
+    company_manager: "会社責任者",
+    employee: "利用者"
+  }.freeze
+
+  STATUS_LABELS = {
+    pending: "受付中",
+    accepted: "登録申請済み",
+    approved: "承認済み",
+    expired: "期限切れ"
+  }.freeze
+
   belongs_to :company, optional: true
   belongs_to :user, optional: true
   belongs_to :invited_by, class_name: "User"
@@ -40,6 +54,18 @@ class Invitation < ApplicationRecord
     pending? && expires_at.future?
   end
 
+  def human_role
+    ROLE_LABELS[role.to_sym]
+  end
+
+  def human_status
+    STATUS_LABELS[status.to_sym]
+  end
+
+  def self.role_options_excluding_admin
+    roles.keys.excluding("admin").map { |role| [ROLE_LABELS[role.to_sym], role] }
+  end
+
   def mark_as_expired_if_needed!
     return unless pending? && expires_at.past?
 
@@ -71,7 +97,4 @@ class Invitation < ApplicationRecord
   def company_required?
     company_manager? || employee?
   end
-
-  
-
 end

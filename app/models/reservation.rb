@@ -1,4 +1,10 @@
 class Reservation < ApplicationRecord
+  STATUS_LABELS = {
+    reserved: "予約中",
+    cancelled: "キャンセル済み",
+    completed: "完了"
+  }.freeze
+
   belongs_to :user
   belongs_to :time_slot
   has_one :treatment_day, through: :time_slot
@@ -11,6 +17,10 @@ class Reservation < ApplicationRecord
 
   validates :status, presence: true
   validate :time_slot_must_not_have_active_reservation
+
+  def human_status
+    STATUS_LABELS[status.to_sym]
+  end
 
   private
 

@@ -21,7 +21,7 @@
             <%= reservation.time_slot.end_time.strftime("%H:%M") %>
           </td>
           <td><%= reservation.user.name %></td>
-          <td><%= reservation.status %></td>
+          <td><%= reservation.human_status %></td>
           <td>
             <% if reservation.reserved? %>
               <%= link_to "キャンセルする",
