@@ -15,6 +15,14 @@
 
 <% if @treatment_day.cancelled? %>
   <p>この施術日は中止されています。時間枠は履歴確認のため表示されています。</p>
+  <p>
+    <%= link_to "施術日を再開する",
+                reopen_treatment_day_path(@treatment_day),
+                data: {
+                  turbo_method: :patch,
+                  turbo_confirm: "この施術日を再開しますか？"
+                } %>
+  </p>
 <% else %>
   <p>
     <%= link_to "施術日を中止する",

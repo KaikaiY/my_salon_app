@@ -205,4 +205,64 @@ RSpec.describe "TreatmentDays", type: :request do
       expect(treatment_day.reload.status).to eq("confirmed")
     end
   end
+
+  describe "PATCH /reopen" do
+    it "管理者は中止済みの施術日を再開できること" do
+      admin = create(:user, :admin)
+      treatment_day = create(:treatment_day, status: :cancelled)
+      sign_in admin
+
+      patch reopen_treatment_day_path(treatment_day)
+
+      expect(response).to redirect_to(treatment_day_path(treatment_day))
+      expect(treatment_day.reload.status).to eq("pending")
+    end
+
+    it "会社責任者は自社の中止済み施術日を再開できること" do
+      manager = create(:user, :company_manager)
+      treatment_day = create(:treatment_day, company: manager.company, status: :cancelled)
+      sign_in manager
+
+      patch reopen_treatment_day_path(treatment_day)
+
+      expect(response).to redirect_to(treatment_day_path(treatment_day))
+      expect(treatment_day.reload.status).to eq("pending")
+    end
+
+    it "再開してもキャンセル済み予約は復活しないこと" do
+      admin = create(:user, :admin)
+      treatment_day = create(:treatment_day, status: :cancelled)
+      time_slot = create(:time_slot, treatment_day: treatment_day)
+      reservation = create(:reservation, :cancelled, time_slot: time_slot)
+      sign_in admin
+
+      patch reopen_treatment_day_path(treatment_day)
+
+      expect(response).to redirect_to(treatment_day_path(treatment_day))
+      expect(treatment_day.reload.status).to eq("pending")
+      expect(reservation.reload.status).to eq("cancelled")
+    end
+
+    it "会社責任者は他社の施術日を再開できないこと" do
+      manager = create(:user, :company_manager)
+      treatment_day = create(:treatment_day, status: :cancelled)
+      sign_in manager
+
+      patch reopen_treatment_day_path(treatment_day)
+
+      expect(response).to redirect_to(root_path)
+      expect(treatment_day.reload.status).to eq("cancelled")
+    end
+
+    it "利用者は施術日を再開できないこと" do
+      user = create(:user)
+      treatment_day = create(:treatment_day, status: :cancelled)
+      sign_in user
+
+      patch reopen_treatment_day_path(treatment_day)
+
+      expect(response).to redirect_to(root_path)
+      expect(treatment_day.reload.status).to eq("cancelled")
+    end
+  end
 end

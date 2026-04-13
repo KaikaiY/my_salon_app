@@ -1,7 +1,7 @@
 class TreatmentDaysController < ApplicationController
   before_action :authenticate_user!
   before_action :ensure_treatment_day_manager!
-  before_action :set_treatment_day, only: %i[show edit update cancel]
+  before_action :set_treatment_day, only: %i[show edit update cancel reopen]
 
   def index
     @treatment_days = treatment_day_scope.includes(:company, :therapist).order(date: :desc)
@@ -47,6 +47,16 @@ class TreatmentDaysController < ApplicationController
       cancel_reserved_reservations
       redirect_to treatment_day_path(@treatment_day), notice: "施術日を中止しました"
     end
+  end
+
+  def reopen
+    unless @treatment_day.cancelled?
+      redirect_to treatment_day_path(@treatment_day), alert: "この施術日は再開できません"
+      return
+    end
+
+    @treatment_day.update(status: :pending)
+    redirect_to treatment_day_path(@treatment_day), notice: "施術日を再開しました"
   end
 
   private
