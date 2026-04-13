@@ -1,15 +1,22 @@
-<p style="color: red;">サロンアプリへようこそ！！</p>
+<section class="home-hero">
+  <h2>サロンアプリへようこそ</h2>
+
   <% if user_signed_in? %>
-    <p>ログイン中です</p>
-    <% if current_user.admin? %>
-      <%= render "admin_menu" %>
-    <% elsif current_user.company_manager? %>
-      <%= render "company_manager_menu" %>
-    <% elsif current_user.therapist? %>
-      <%= render "therapist_menu" %>
-    <% elsif current_user.employee? %>
-      <%= render "employee_menu" %>
-    <% end %>
-  <% else %> 
-    <p>ログインしていません</p>   
-  <% end %> 
+    <p><%= current_user.name %>さんが<%= current_user.human_role %>としてログイン中です。</p>
+
+    <section class="home-menu">
+      <% if current_user.admin? %>
+        <%= render "admin_menu" %>
+      <% elsif current_user.company_manager? %>
+        <%= render "company_manager_menu" %>
+      <% elsif current_user.therapist? %>
+        <%= render "therapist_menu" %>
+      <% elsif current_user.employee? %>
+        <%= render "employee_menu" %>
+      <% end %>
+    </section>
+  <% else %>
+    <p>ログインしていません</p>
+    <p><%= link_to "ログイン画面へ", new_user_session_path %></p>
+  <% end %>
+</section>

@@ -1,13 +1,21 @@
-<h1>予約管理アプリ</h1>
-<ul class='lists-right'>
-  <% if user_signed_in? %>
-    <li><%= link_to current_user.name, root_path, class: "user-name"%> </li>
-    <% if current_user.employee? %>
-      <li><%= link_to '予約可能枠', time_slots_path %></li>
+<header>
+  <h1><%= link_to "予約管理アプリ", root_path %></h1>
+
+  <ul class='lists-right'>
+    <% if user_signed_in? %>
+      <li>
+        <%= link_to root_path, class: "user-name" do %>
+          <%= current_user.name %>（<%= current_user.human_role %>）
+        <% end %>
+      </li>
+      <li><%= link_to 'ホーム', root_path %></li>
+      <% if current_user.employee? %>
+        <li><%= link_to '予約可能枠', time_slots_path %></li>
+      <% end %>
+      <li><%= link_to '予約一覧', reservations_path %></li>
+      <li><%= link_to 'ログアウト', destroy_user_session_path, data: { turbo_method: :delete }, class: "logout" %></li>
+    <% else %>
+      <li><%= link_to 'ログイン', new_user_session_path, class: "login" %></li>
     <% end %>
-    <li><%= link_to '予約一覧', reservations_path %></li>
-    <li><%= link_to 'ログアウト', destroy_user_session_path, data: {turbo_method: :delete}, class: "logout"%> </li> 
-  <% else %>
-    <li><%= link_to 'ログイン', new_user_session_path, class: "login" %></li>
-  <% end %>
-</ul>
+  </ul>
+</header>
