@@ -20,7 +20,7 @@ class TreatmentDaysController < ApplicationController
     assign_company_for_company_manager
 
     if @treatment_day.save
-      redirect_to treatment_day_path(@treatment_day), notice: "施術日を登録しました"
+      redirect_to treatment_day_path(@treatment_day), notice: "施術日を登録しました。時間枠の作成に進めます。"
     else
       render :new, status: :unprocessable_entity
     end
@@ -33,7 +33,7 @@ class TreatmentDaysController < ApplicationController
     assign_company_for_company_manager
 
     if @treatment_day.update(treatment_day_params)
-      redirect_to treatment_day_path(@treatment_day), notice: "施術日を更新しました"
+      redirect_to treatment_day_path(@treatment_day), notice: "施術日を更新しました。"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -45,7 +45,7 @@ class TreatmentDaysController < ApplicationController
     else
       @treatment_day.update(status: :cancelled)
       cancel_reserved_reservations
-      redirect_to treatment_day_path(@treatment_day), notice: "施術日を中止しました"
+      redirect_to treatment_day_path(@treatment_day), notice: "施術日を中止しました。関連する予約中の予約もキャンセルされました。"
     end
   end
 
@@ -56,7 +56,7 @@ class TreatmentDaysController < ApplicationController
     end
 
     @treatment_day.update(status: :pending)
-    redirect_to treatment_day_path(@treatment_day), notice: "施術日を再開しました"
+    redirect_to treatment_day_path(@treatment_day), notice: "施術日を再開しました。必要に応じて時間枠や予約状況を確認してください。"
   end
 
   private

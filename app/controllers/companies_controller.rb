@@ -18,7 +18,7 @@ class CompaniesController < ApplicationController
   def create
     @company = Company.new(company_params)
     if @company.save
-      redirect_to companies_path, notice: '登録しました'
+      redirect_to companies_path, notice: '会社を登録しました。'
     else
       render :new, status: :unprocessable_entity
     end
@@ -29,7 +29,7 @@ class CompaniesController < ApplicationController
 
   def update
     if @company.update(company_params)
-      redirect_to company_path(@company.id), notice: '更新しました'
+      redirect_to company_path(@company.id), notice: '会社情報を更新しました。'
     else
       render :edit, status: :unprocessable_entity
     end
@@ -37,7 +37,7 @@ class CompaniesController < ApplicationController
 
   def destroy
     if @company.destroy
-      redirect_to companies_path, notice: '削除しました'
+      redirect_to companies_path, notice: '会社を削除しました。'
     else
       render :show, status: :unprocessable_entity
     end

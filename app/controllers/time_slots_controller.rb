@@ -21,7 +21,7 @@ class TimeSlotsController < ApplicationController
 
     @time_slot = @treatment_day.time_slots.new(time_slot_params)
     if @time_slot.save
-      redirect_to treatment_day_path(@treatment_day), notice: "時間枠を登録しました"
+      redirect_to treatment_day_path(@treatment_day), notice: "時間枠を登録しました。"
     else
       render :new, status: :unprocessable_content
     end
@@ -32,7 +32,7 @@ class TimeSlotsController < ApplicationController
 
   def update
     if @time_slot.update(time_slot_params)
-      redirect_to treatment_day_path(@treatment_day), notice: "時間枠を更新しました"
+      redirect_to treatment_day_path(@treatment_day), notice: "時間枠を更新しました。"
     else
       render :edit, status: :unprocessable_content
     end
@@ -43,7 +43,7 @@ class TimeSlotsController < ApplicationController
       redirect_to treatment_day_path(@treatment_day), alert: "予約履歴がある時間枠は削除できません"
     else
       @time_slot.destroy
-      redirect_to treatment_day_path(@treatment_day), notice: "時間枠を削除しました"
+      redirect_to treatment_day_path(@treatment_day), notice: "時間枠を削除しました。"
     end
   end
 
@@ -69,7 +69,7 @@ class TimeSlotsController < ApplicationController
       time_slots.each(&:save!)
     end
 
-    redirect_to treatment_day_path(@treatment_day), notice: "#{time_slots.count}件の時間枠を登録しました"
+    redirect_to treatment_day_path(@treatment_day), notice: "#{time_slots.count}件の時間枠を登録しました。"
   rescue ActiveRecord::RecordInvalid
     render :new, status: :unprocessable_content
   end

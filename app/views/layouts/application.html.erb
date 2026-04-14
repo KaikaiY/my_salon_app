@@ -12,13 +12,7 @@
 
   <body>
     <%= render 'shared/header' %>
-    <% if notice.present? %>
-      <p class="notice"><%= notice %></p>
-    <% end %>
-
-    <% if alert.present? %>
-      <p class="alert"><%= alert %></p>
-    <% end %>
+    <%= render "shared/flash" %>
     <%= yield %>
   </body>
 </html>
