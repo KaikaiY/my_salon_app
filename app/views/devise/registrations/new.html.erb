@@ -1,5 +1,9 @@
 <h2>招待ユーザー登録</h2>
 
+<p>この画面から登録申請を行います。</p>
+<p>登録申請後は、管理者の承認が完了するとログインできるようになります。</p>
+<p>メールアドレスは招待時に指定されたものから変更できません。</p>
+
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 

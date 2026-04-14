@@ -1,5 +1,9 @@
 <h2>招待作成</h2>
 
+<p>招待URLを発行して、対象ユーザーに共有します。</p>
+<p>施術者は会社選択不要、会社責任者と利用者は会社選択が必要です。</p>
+<p>招待された人が登録申請し、その後に管理者が承認するとログインできるようになります。</p>
+
 <%= form_with model: @invitation do |f| %>
   <% if @invitation.errors.any? %>
     <div>
@@ -18,12 +22,12 @@
 
   <div>
     <p><%= f.label :role, "権限" %></p>
-    <p><%= f.select :role, Invitation.role_options_excluding_admin, prompt: "選択してください" %></p>
+    <p><%= f.select :role, Invitation.role_options_excluding_admin, { prompt: "選択してください" }, { id: "invitation-role" } %></p>
   </div>
 
-  <div>
-    <p><%= f.label :company_id, "会社（会社責任者 / 利用者 の場合のみ）" %></p>
-    <p><%= f.collection_select :company_id, Company.all, :id, :company_name, prompt: "選択してください" %></p>
+  <div id="company-field">
+    <p><%= f.label :company_id, "会社" %></p>
+    <p><%= f.collection_select :company_id, Company.all, :id, :company_name, { prompt: "選択してください" }, { id: "invitation-company" } %></p>
   </div>
 
   <div>
