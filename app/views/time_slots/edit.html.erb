@@ -1,7 +1,14 @@
-<h1>時間枠編集</h1>
+<section class="business-form-page">
+  <div class="business-form-card">
+    <div class="page-actions page-actions-left">
+      <%= link_to "施術日詳細へ戻る", treatment_day_path(@treatment_day), class: "inline-action" %>
+    </div>
 
-<p><%= link_to "施術日詳細へ戻る", treatment_day_path(@treatment_day) %></p>
+    <h1>時間枠編集</h1>
+    <div class="business-form-intro">
+      <p>登録済みの時間枠を更新します。</p>
+    </div>
 
-<div class="time-slot-form">
-  <%= render "form" %>
-</div>
+    <%= render "form" %>
+  </div>
+</section>

@@ -1,20 +1,22 @@
 <%= form_with model: company, local: true do |f| %>
-    <%= render 'shared/error_messages', model: f.object %>
-    <div class="company_name">
-      <%= f.label "会社名" %>
-      <%= f.text_field :company_name %> 
-    </div>
-    <div class="email">
-      <%= f.label "メールアドレス" %>
-      <%= f.text_field :email %> 
-    </div>
-    <div class="phone_number">
-      <%= f.label "電話番号" %>
-      <%= f.text_field :phone %> 
+  <%= render 'shared/error_messages', model: f.object %>
 
-    </div>
-    <div class="submit">
-      <%= f.submit "保存" ,class:"save-btn", id:"button" %>
-    </div>
+  <div class="field">
+    <p><%= f.label :company_name, "会社名" %></p>
+    <p><%= f.text_field :company_name %></p>
+  </div>
 
-  <% end %>
+  <div class="field">
+    <p><%= f.label :email, "メールアドレス" %></p>
+    <p><%= f.text_field :email %></p>
+  </div>
+
+  <div class="field">
+    <p><%= f.label :phone, "電話番号" %></p>
+    <p><%= f.text_field :phone %></p>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "保存する" %>
+  </div>
+<% end %>

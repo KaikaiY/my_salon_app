@@ -1,5 +1,15 @@
-<h1>編集ページです</h1>
-<div>
+<section class="business-form-page">
+  <div class="business-form-card">
+    <div class="page-actions page-actions-left">
+      <%= link_to "会社詳細へ戻る", company_path(@company), class: "inline-action" %>
+    </div>
+
+    <h1>会社編集</h1>
+    <div class="business-form-intro">
+      <p>登録済みの会社情報を更新します。</p>
+    </div>
+
     <%= render "form", company: @company %>
-</div>
+  </div>
+</section>
   

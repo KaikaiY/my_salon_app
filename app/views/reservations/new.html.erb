@@ -1,33 +1,40 @@
-<h1>予約作成</h1>
-
-<p>施術日: <%= @treatment_day.date %></p>
-<p>
-  時間:
-  <%= @time_slot.start_time.strftime("%H:%M") %>
-  -
-  <%= @time_slot.end_time.strftime("%H:%M") %>
-</p>
-
-<%= form_with model: [@treatment_day, @time_slot, @reservation] do |f| %>
-  <% if @reservation.errors.any? %>
-    <div>
-      <h2><%= @reservation.errors.count %>件のエラーがあります</h2>
-      <ul>
-        <% @reservation.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+<section class="business-form-page">
+  <div class="business-form-card">
+    <div class="page-actions page-actions-left">
+      <%= link_to "予約一覧へ戻る", reservations_path, class: "inline-action" %>
     </div>
-  <% end %>
 
-  <div>
-    <p><%= f.label :note, "メモ" %></p>
-    <p><%= f.text_area :note %></p>
+    <h1>予約作成</h1>
+    <div class="business-form-intro">
+      <p>施術日: <%= @treatment_day.date %></p>
+      <p>
+        時間:
+        <%= @time_slot.start_time.strftime("%H:%M") %>
+        -
+        <%= @time_slot.end_time.strftime("%H:%M") %>
+      </p>
+    </div>
+
+    <%= form_with model: [@treatment_day, @time_slot, @reservation] do |f| %>
+      <% if @reservation.errors.any? %>
+        <div class="form-errors">
+          <p><%= @reservation.errors.count %>件のエラーがあります。</p>
+          <ul>
+            <% @reservation.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="field">
+        <p><%= f.label :note, "メモ" %></p>
+        <p><%= f.text_area :note %></p>
+      </div>
+
+      <div class="actions">
+        <%= f.submit "予約する" %>
+      </div>
+    <% end %>
   </div>
-
-  <div>
-    <%= f.submit "予約する" %>
-  </div>
-<% end %>
-
-<p><%= link_to "予約一覧へ戻る", reservations_path %></p>
+</section>
