@@ -682,6 +682,38 @@ ul {
   margin-bottom: 0;
 }
 
+.business-form-page {
+  display: flex;
+  justify-content: center;
+  padding: 32px 0 48px;
+}
+
+.business-form-card {
+  width: 100%;
+  max-width: 760px;
+}
+
+.business-form-intro {
+  margin-bottom: 18px;
+}
+
+.business-form-intro p {
+  color: var(--text-muted);
+}
+
+.error-alert {
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  background: var(--alert-bg);
+  border: 1px solid #f3c1bf;
+  border-radius: 14px;
+  color: var(--alert-text);
+}
+
+.error-alert ul {
+  margin: 0;
+}
+
 @media (max-width: 768px) {
   body > *:not(header) {
     width: min(100% - 24px, 100%);

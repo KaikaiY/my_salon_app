@@ -1,5 +1,15 @@
-<h1>施術日登録</h1>
+<section class="business-form-page">
+  <div class="business-form-card">
+    <div class="page-actions page-actions-left">
+      <%= link_to "施術日一覧へ戻る", treatment_days_path, class: "inline-action" %>
+    </div>
 
-<div class="treatment-day-form">
-  <%= render "form", treatment_day: @treatment_day %>
-</div>
+    <h1>施術日登録</h1>
+    <div class="business-form-intro">
+      <p>施術日と担当施術者、予約受付元を設定します。</p>
+      <p>保存後に時間枠の追加へ進めます。</p>
+    </div>
+
+    <%= render "form", treatment_day: @treatment_day %>
+  </div>
+</section>

@@ -1,4 +1,11 @@
-<h1>会社登録ページへようこそ！！</h1>
-<div class="company-record-form">
-  <%= render "form", company: @company %>
-</div>
+<section class="business-form-page">
+  <div class="business-form-card">
+    <h1>会社登録</h1>
+    <div class="business-form-intro">
+      <p>会社情報を登録します。</p>
+      <p>登録後は会社一覧から詳細を確認できます。</p>
+    </div>
+
+    <%= render "form", company: @company %>
+  </div>
+</section>

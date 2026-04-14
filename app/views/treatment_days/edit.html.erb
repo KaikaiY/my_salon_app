@@ -1,5 +1,14 @@
-<h1>施術日編集</h1>
+<section class="business-form-page">
+  <div class="business-form-card">
+    <div class="page-actions page-actions-left">
+      <%= link_to "施術日詳細へ戻る", treatment_day_path(@treatment_day), class: "inline-action" %>
+    </div>
 
-<div class="treatment-day-form">
-  <%= render "form", treatment_day: @treatment_day %>
-</div>
+    <h1>施術日編集</h1>
+    <div class="business-form-intro">
+      <p>施術日の内容を更新します。</p>
+    </div>
+
+    <%= render "form", treatment_day: @treatment_day %>
+  </div>
+</section>
