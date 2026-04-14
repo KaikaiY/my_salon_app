@@ -1,41 +1,47 @@
-<h2>招待作成</h2>
+<section class="auth-page">
+  <div class="auth-card auth-card-wide">
+    <h2>招待作成</h2>
 
-<p>招待URLを発行して、対象ユーザーに共有します。</p>
-<p>施術者は会社選択不要、会社責任者と利用者は会社選択が必要です。</p>
-<p>招待された人が登録申請し、その後に管理者が承認するとログインできるようになります。</p>
-
-<%= form_with model: @invitation do |f| %>
-  <% if @invitation.errors.any? %>
-    <div>
-      <ul>
-        <% @invitation.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+    <div class="auth-description">
+      <p>招待URLを発行して、対象ユーザーに共有します。</p>
+      <p>施術者は会社選択不要、会社責任者と利用者は会社選択が必要です。</p>
+      <p>招待された人が登録申請し、その後に管理者が承認するとログインできるようになります。</p>
     </div>
-  <% end %>
 
-  <div>
-    <p><%= f.label :email, "メールアドレス" %></p>
-    <p><%= f.email_field :email %></p>
-  </div>
+    <%= form_with model: @invitation do |f| %>
+      <% if @invitation.errors.any? %>
+        <div class="form-errors">
+          <ul>
+            <% @invitation.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
 
-  <div>
-    <p><%= f.label :role, "権限" %></p>
-    <p><%= f.select :role, Invitation.role_options_excluding_admin, { prompt: "選択してください" }, { id: "invitation-role" } %></p>
-  </div>
+      <div>
+        <p><%= f.label :email, "メールアドレス" %></p>
+        <p><%= f.email_field :email %></p>
+      </div>
 
-  <div id="company-field">
-    <p><%= f.label :company_id, "会社" %></p>
-    <p><%= f.collection_select :company_id, Company.all, :id, :company_name, { prompt: "選択してください" }, { id: "invitation-company" } %></p>
-  </div>
+      <div>
+        <p><%= f.label :role, "権限" %></p>
+        <p><%= f.select :role, Invitation.role_options_excluding_admin, { prompt: "選択してください" }, { id: "invitation-role" } %></p>
+      </div>
 
-  <div>
-    <p><%= f.label :expires_at, "有効期限" %></p>
-    <p><%= f.datetime_field :expires_at %></p>
-  </div>
+      <div id="company-field">
+        <p><%= f.label :company_id, "会社" %></p>
+        <p><%= f.collection_select :company_id, Company.all, :id, :company_name, { prompt: "選択してください" }, { id: "invitation-company" } %></p>
+      </div>
 
-  <div>
-    <%= f.submit "招待を作成する" %>
+      <div>
+        <p><%= f.label :expires_at, "有効期限" %></p>
+        <p><%= f.datetime_field :expires_at %></p>
+      </div>
+
+      <div class="actions">
+        <%= f.submit "招待を作成する" %>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</section>

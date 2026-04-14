@@ -363,10 +363,54 @@ ul {
   max-width: 480px;
 }
 
+.auth-card-wide {
+  max-width: 680px;
+}
+
+.auth-description {
+  margin-bottom: 18px;
+}
+
+.auth-description p {
+  color: var(--text-muted);
+}
+
+.auth-links {
+  margin-top: 18px;
+}
+
+.auth-links a {
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.form-errors {
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  background: var(--alert-bg);
+  border: 1px solid #f3c1bf;
+  border-radius: 14px;
+  color: var(--alert-text);
+}
+
+.form-errors ul {
+  margin: 0;
+}
+
 .remember-field {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.remember-field input {
+  width: auto;
+  max-width: none;
+  margin: 0;
+}
+
+.remember-field p {
+  margin: 0;
 }
 
 @media (max-width: 768px) {
