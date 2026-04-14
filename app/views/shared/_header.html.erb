@@ -1,22 +1,43 @@
-<header>
-  <h1><%= link_to "予約管理アプリ", root_path %></h1>
+<header class="site-header">
+  <div class="site-header__brand">
+    <h1><%= link_to "予約管理アプリ", root_path %></h1>
+  </div>
 
-  <ul class='lists-right'>
+  <div class="site-header__actions">
     <% if user_signed_in? %>
-      <li>
-        <%= link_to root_path, class: "user-name" do %>
-          <%= current_user.name %>（<%= current_user.human_role %>）
-        <% end %>
-      </li>
-      <li><%= link_to 'ホーム', root_path %></li>
-      <li><%= link_to 'アカウント編集', edit_user_registration_path %></li>
-      <% if current_user.employee? %>
-        <li><%= link_to '予約可能枠', time_slots_path %></li>
+      <%= link_to root_path, class: "user-name" do %>
+        <%= current_user.name %>（<%= current_user.human_role %>）
       <% end %>
-      <li><%= link_to '予約一覧', reservations_path %></li>
-      <li><%= link_to 'ログアウト', destroy_user_session_path, data: { turbo_method: :delete }, class: "logout" %></li>
-    <% else %>
-      <li><%= link_to 'ログイン', new_user_session_path, class: "login" %></li>
     <% end %>
-  </ul>
+
+    <button
+      type="button"
+      class="menu-toggle"
+      id="menu-toggle"
+      aria-expanded="false"
+      aria-controls="site-menu">
+      メニュー
+    </button>
+  </div>
+
+  <nav class="site-menu" id="site-menu" hidden>
+    <ul class="site-menu__list">
+      <% if user_signed_in? %>
+        <li><%= link_to "ホーム", root_path, class: "site-menu__link" %></li>
+        <li><%= link_to "予約一覧", reservations_path, class: "site-menu__link" %></li>
+        <% if current_user.employee? %>
+          <li><%= link_to "予約可能枠", time_slots_path, class: "site-menu__link" %></li>
+        <% end %>
+        <li><%= link_to "アカウント編集", edit_user_registration_path, class: "site-menu__link" %></li>
+        <li>
+          <%= link_to "ログアウト",
+                      destroy_user_session_path,
+                      data: { turbo_method: :delete },
+                      class: "site-menu__link logout" %>
+        </li>
+      <% else %>
+        <li><%= link_to "ログイン", new_user_session_path, class: "site-menu__link login" %></li>
+      <% end %>
+    </ul>
+  </nav>
 </header>

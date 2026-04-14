@@ -48,38 +48,35 @@ body > *:not(header) {
   margin-right: auto;
 }
 
-header {
+.site-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
+  position: relative;
   padding: 20px 24px;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   box-shadow: 0 2px 12px rgba(31, 41, 55, 0.04);
 }
 
-header h1 {
+.site-header h1 {
   margin: 0;
   font-size: 1.4rem;
 }
 
-header h1 a {
+.site-header h1 a {
   color: var(--primary-dark);
   text-decoration: none;
 }
 
-.lists-right {
+.site-header__actions {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
   gap: 12px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
 }
 
-.lists-right a {
+.site-header__actions a {
   display: inline-flex;
   align-items: center;
   min-height: 40px;
@@ -90,12 +87,64 @@ header h1 a {
   transition: background-color 0.2s ease;
 }
 
-.lists-right a:hover {
+.site-header__actions a:hover {
   background: var(--surface-muted);
 }
 
 .user-name {
   font-weight: 700;
+}
+
+.menu-toggle {
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-muted);
+  color: var(--primary-dark);
+}
+
+.menu-toggle:hover {
+  background: #dce7f1;
+}
+
+.site-menu {
+  position: absolute;
+  top: calc(100% - 4px);
+  right: 24px;
+  z-index: 10;
+  min-width: 220px;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+
+.site-menu__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-menu__list li + li {
+  margin-top: 8px;
+}
+
+.site-menu__link {
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  color: var(--primary-dark);
+  text-decoration: none;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.site-menu__link:hover {
+  background: var(--surface-muted);
 }
 
 .login {
@@ -719,23 +768,24 @@ ul {
     width: min(100% - 24px, 100%);
   }
 
-  header {
-    flex-direction: column;
-    align-items: flex-start;
+  .site-header {
     padding: 16px;
   }
 
-  .lists-right {
-    width: 100%;
+  .site-header__actions {
+    gap: 8px;
   }
 
-  .lists-right li {
-    width: 100%;
+  .user-name {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .lists-right a {
-    width: 100%;
-    justify-content: center;
+  .site-menu {
+    left: 16px;
+    right: 16px;
+    min-width: 0;
   }
 
   .page-actions {
