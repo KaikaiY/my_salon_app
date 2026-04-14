@@ -1,15 +1,30 @@
 <h1>会社詳細</h1>
-<%= link_to '会社一覧ページへ', companies_path %>
-<div class="company-show">
-  <div class="company-name">
-    <span>会社名:<%= @company.company_name %></span>
-  </div>
-  <div class="company-email">
-    <span>メールアドレス:<%= @company.email %></span>
-    </div>
-  <div class="company-phone">
-    <span>電話番号:<%= @company.phone %></span>
-  </div>
+
+<div class="page-actions page-actions-left">
+  <%= link_to '会社一覧ページへ', companies_path, class: "inline-action" %>
 </div>
-<%= link_to "会社の編集", edit_company_path(@company.id), class: "company-edit" %>
-<%= link_to "会社の削除", company_path(@company.id), data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, class: "company-destroy" %>
+
+<section class="detail-card">
+  <div class="detail-list">
+    <div class="detail-item">
+      <p class="detail-label">会社名</p>
+      <p class="detail-value"><%= @company.company_name %></p>
+    </div>
+    <div class="detail-item">
+      <p class="detail-label">メールアドレス</p>
+      <p class="detail-value"><%= @company.email %></p>
+    </div>
+    <div class="detail-item">
+      <p class="detail-label">電話番号</p>
+      <p class="detail-value"><%= @company.phone %></p>
+    </div>
+  </div>
+
+  <div class="detail-actions">
+    <%= link_to "会社の編集", edit_company_path(@company.id), class: "inline-action" %>
+    <%= link_to "会社の削除",
+                company_path(@company.id),
+                class: "inline-action danger-action",
+                data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" } %>
+  </div>
+</section>

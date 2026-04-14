@@ -1,61 +1,82 @@
 <h1>施術日詳細</h1>
 
-<p><%= link_to "施術日一覧ページへ", treatment_days_path %></p>
-
-<div class="treatment-day-show">
-  <div>施術日:<%= @treatment_day.date %></div>
-  <div>会社:<%= @treatment_day.company.company_name %></div>
-  <div>担当施術者:<%= @treatment_day.therapist&.name || "未割当" %></div>
-  <div>予約受付元:<%= @treatment_day.human_booking_source %></div>
-  <div>ステータス:<%= @treatment_day.human_status %></div>
-  <div>メモ:<%= @treatment_day.note %></div>
+<div class="page-actions page-actions">
+  <%= link_to "施術日一覧ページへ", treatment_days_path, class: "inline-action" %>
 </div>
 
-<%= link_to "施術日の編集", edit_treatment_day_path(@treatment_day), class: "treatment-day-edit" %>
+<section class="detail-card detail-card-centered">
+  <div class="detail-list">
+    <div class="detail-item">
+      <p class="detail-label">施術日</p>
+      <p class="detail-value"><%= @treatment_day.date %></p>
+    </div>
+    <div class="detail-item">
+      <p class="detail-label">会社</p>
+      <p class="detail-value"><%= @treatment_day.company.company_name %></p>
+    </div>
+    <div class="detail-item">
+      <p class="detail-label">担当施術者</p>
+      <p class="detail-value"><%= @treatment_day.therapist&.name || "未割当" %></p>
+    </div>
+    <div class="detail-item">
+      <p class="detail-label">予約受付元</p>
+      <p class="detail-value"><%= @treatment_day.human_booking_source %></p>
+    </div>
+    <div class="detail-item">
+      <p class="detail-label">ステータス</p>
+      <p class="detail-value"><%= @treatment_day.human_status %></p>
+    </div>
+    <div class="detail-item">
+      <p class="detail-label">メモ</p>
+      <p class="detail-value"><%= @treatment_day.note.presence || "なし" %></p>
+    </div>
+  </div>
 
-<% if @treatment_day.cancelled? %>
-  <p>この施術日は中止されています。時間枠は履歴確認のため表示されています。</p>
-  <p>
-    <%= link_to "施術日を再開する",
-                reopen_treatment_day_path(@treatment_day),
-                data: {
-                  turbo_method: :patch,
-                  turbo_confirm: "この施術日を再開しますか？"
-                } %>
-  </p>
-<% else %>
-  <p>
-    <%= link_to "施術日を中止する",
-                cancel_treatment_day_path(@treatment_day),
-                data: {
-                  turbo_method: :patch,
-                  turbo_confirm: "この施術日を中止しますか？"
-                } %>
-  </p>
+  <div class="detail-actions">
+    <%= link_to "施術日の編集", edit_treatment_day_path(@treatment_day), class: "inline-action" %>
 
-  <p>
-    <%= link_to "時間枠を追加する", new_treatment_day_time_slot_path(@treatment_day) %>
-  </p>
-<% end %>
+    <% if @treatment_day.cancelled? %>
+      <p class="detail-note">この施術日は中止されています。時間枠は履歴確認のため表示されています。</p>
+      <%= link_to "施術日を再開する",
+                  reopen_treatment_day_path(@treatment_day),
+                  class: "inline-action",
+                  data: {
+                    turbo_method: :patch,
+                    turbo_confirm: "この施術日を再開しますか？"
+                  } %>
+    <% else %>
+      <%= link_to "施術日を中止する",
+                  cancel_treatment_day_path(@treatment_day),
+                  class: "inline-action danger-action",
+                  data: {
+                    turbo_method: :patch,
+                    turbo_confirm: "この施術日を中止しますか？"
+                  } %>
+
+      <%= link_to "時間枠を追加する", new_treatment_day_time_slot_path(@treatment_day), class: "inline-action" %>
+    <% end %>
+  </div>
+</section>
 
 <h2>時間枠一覧</h2>
 
 <% if @treatment_day.time_slots.any? %>
-  <ul>
+  <ul class="detail-sublist">
     <% @treatment_day.time_slots.each do |time_slot| %>
-      <li>
-        <span><%= time_slot.start_time.strftime("%H:%M") %> 〜 <%= time_slot.end_time.strftime("%H:%M") %></span>
+      <li class="detail-subitem">
+        <span class="time-range"><%= time_slot.start_time.strftime("%H:%M") %> 〜 <%= time_slot.end_time.strftime("%H:%M") %></span>
         <% if @treatment_day.cancelled? %>
-          <span>操作不可</span>
+          <span class="status-chip">操作不可</span>
         <% else %>
-          <%= link_to "編集", edit_treatment_day_time_slot_path(@treatment_day, time_slot) %>
+          <%= link_to "編集", edit_treatment_day_time_slot_path(@treatment_day, time_slot), class: "inline-action" %>
         <% end %>
 
         <% if time_slot.reservations.exists? %>
-          <span>予約履歴あり</span>
+          <span class="status-chip">予約履歴あり</span>
         <% elsif !@treatment_day.cancelled? %>
           <%= link_to "削除",
                       treatment_day_time_slot_path(@treatment_day, time_slot),
+                      class: "inline-action danger-action",
                       data: {
                         turbo_method: :delete,
                         turbo_confirm: "この時間枠を削除しますか？"

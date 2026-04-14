@@ -1,30 +1,58 @@
 <h1>予約詳細</h1>
 
-<p>施術日: <%= @reservation.time_slot.treatment_day.date %></p>
-<p>
-  時間:
-  <%= @reservation.time_slot.start_time.strftime("%H:%M") %>
-  -
-  <%= @reservation.time_slot.end_time.strftime("%H:%M") %>
-</p>
-<p>会社: <%= @reservation.time_slot.treatment_day.company.company_name %></p>
-<p>担当施術者: <%= @reservation.time_slot.treatment_day.therapist&.name || "未割当" %></p>
-<p>利用者: <%= @reservation.user.name %></p>
-<p>ステータス: <%= @reservation.human_status %></p>
-<p>メモ: <%= @reservation.note.presence || "なし" %></p>
+<div class="page-actions page-actions">
+  <%= link_to "予約一覧へ戻る", reservations_path, class: "inline-action" %>
+</div>
 
-<% if @reservation.time_slot.treatment_day.cancelled? %>
-  <p>この予約の施術日は中止されています。</p>
-<% end %>
+<section class="detail-card detail-card-centered">
+  <div class="detail-list">
+    <div class="detail-item">
+      <p class="detail-label">施術日</p>
+      <p class="detail-value"><%= @reservation.time_slot.treatment_day.date %></p>
+    </div>
+    <div class="detail-item">
+      <p class="detail-label">時間</p>
+      <p class="detail-value">
+        <%= @reservation.time_slot.start_time.strftime("%H:%M") %>
+        -
+        <%= @reservation.time_slot.end_time.strftime("%H:%M") %>
+      </p>
+    </div>
+    <div class="detail-item">
+      <p class="detail-label">会社</p>
+      <p class="detail-value"><%= @reservation.time_slot.treatment_day.company.company_name %></p>
+    </div>
+    <div class="detail-item">
+      <p class="detail-label">担当施術者</p>
+      <p class="detail-value"><%= @reservation.time_slot.treatment_day.therapist&.name || "未割当" %></p>
+    </div>
+    <div class="detail-item">
+      <p class="detail-label">利用者</p>
+      <p class="detail-value"><%= @reservation.user.name %></p>
+    </div>
+    <div class="detail-item">
+      <p class="detail-label">ステータス</p>
+      <p class="detail-value"><%= @reservation.human_status %></p>
+    </div>
+    <div class="detail-item">
+      <p class="detail-label">メモ</p>
+      <p class="detail-value"><%= @reservation.note.presence || "なし" %></p>
+    </div>
+  </div>
 
-<% if @reservation.reserved? %>
-  <p>
-    <%= link_to "キャンセルする",
-                cancel_reservation_path(@reservation),
-                data: {
-                  turbo_method: :patch,
-                  turbo_confirm: "この予約をキャンセルしますか？"
-                } %>
-  </p>
-<% end %>
-<p><%= link_to "予約一覧へ戻る", reservations_path %></p>
+  <div class="detail-actions">
+    <% if @reservation.time_slot.treatment_day.cancelled? %>
+      <p class="detail-note">この予約の施術日は中止されています。</p>
+    <% end %>
+
+    <% if @reservation.reserved? %>
+      <%= link_to "キャンセルする",
+                  cancel_reservation_path(@reservation),
+                  class: "inline-action danger-action",
+                  data: {
+                    turbo_method: :patch,
+                    turbo_confirm: "この予約をキャンセルしますか？"
+                  } %>
+    <% end %>
+  </div>
+</section>

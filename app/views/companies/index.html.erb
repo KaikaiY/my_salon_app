@@ -8,15 +8,19 @@
       <% @companies.each do |company|%>
         <%= link_to company_path(company) do %>
           <li class="company-list">
-            <div class="company-name">
-              <span>会社名:<%= company.company_name %></span>
+            <div class="card-item">
+              <p class="card-label">会社名</p>
+              <p class="card-value"><%= company.company_name %></p>
             </div>
-            <div class="company-email">
-              <span>メールアドレス:<%= company.email %></span>
-              </div>
-            <div class="company-phone">
-              <span>電話番号:<%= company.phone %></span>
+            <div class="card-item">
+              <p class="card-label">メールアドレス</p>
+              <p class="card-value"><%= company.email %></p>
             </div>
+            <div class="card-item">
+              <p class="card-label">電話番号</p>
+              <p class="card-value"><%= company.phone %></p>
+            </div>
+            <p class="card-hint">クリックして詳細を表示</p>
           </li>
         <% end %>
       <% end %>

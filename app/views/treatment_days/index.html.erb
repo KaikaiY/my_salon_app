@@ -10,11 +10,27 @@
       <% @treatment_days.each do |treatment_day| %>
         <%= link_to treatment_day_path(treatment_day) do %>
           <li class="treatment-day-list">
-            <div>施術日:<%= treatment_day.date %></div>
-            <div>会社:<%= treatment_day.company.company_name %></div>
-            <div>担当施術者:<%= treatment_day.therapist&.name || "未割当" %></div>
-            <div>予約受付元:<%= treatment_day.human_booking_source %></div>
-            <div>ステータス:<%= treatment_day.human_status %></div>
+            <div class="card-item">
+              <p class="card-label">施術日</p>
+              <p class="card-value"><%= treatment_day.date %></p>
+            </div>
+            <div class="card-item">
+              <p class="card-label">会社</p>
+              <p class="card-value"><%= treatment_day.company.company_name %></p>
+            </div>
+            <div class="card-item">
+              <p class="card-label">担当施術者</p>
+              <p class="card-value"><%= treatment_day.therapist&.name || "未割当" %></p>
+            </div>
+            <div class="card-item">
+              <p class="card-label">予約受付元</p>
+              <p class="card-value"><%= treatment_day.human_booking_source %></p>
+            </div>
+            <div class="card-item">
+              <p class="card-label">ステータス</p>
+              <p class="card-value"><%= treatment_day.human_status %></p>
+            </div>
+            <p class="card-hint">クリックして詳細を表示</p>
           </li>
         <% end %>
       <% end %>
