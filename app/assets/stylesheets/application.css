@@ -645,6 +645,10 @@ ul {
   margin-bottom: 8px;
 }
 
+.auth-links p {
+  margin-bottom: 8px;
+}
+
 .form-errors {
   margin-bottom: 18px;
   padding: 14px 16px;
@@ -672,6 +676,10 @@ ul {
 
 .remember-field p {
   margin: 0;
+}
+
+.auth-card .detail-card {
+  margin-bottom: 0;
 }
 
 @media (max-width: 768px) {
