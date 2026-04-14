@@ -1,7 +1,13 @@
 <h3>利用者メニュー</h3>
 <p>予約可能枠の確認と、自分の予約管理を行えます。</p>
 
-<ul>
-  <li><%= link_to '予約可能枠一覧ページへ', time_slots_path, class: "time-slot-list" %></li>
-  <li><%= link_to '予約一覧ページへ', reservations_path, class: "reservation-list" %></li>
-</ul>
+<div class="home-menu-groups">
+  <section class="home-menu-group">
+    <h4>予約管理</h4>
+    <p>予約可能な時間枠の確認と、自分の予約管理を行います。</p>
+    <ul class="home-menu-list">
+      <li class="home-menu-item"><%= link_to '予約可能枠一覧ページへ', time_slots_path, class: "home-menu-link" %></li>
+      <li class="home-menu-item"><%= link_to '予約一覧ページへ', reservations_path, class: "home-menu-link" %></li>
+    </ul>
+  </section>
+</div>

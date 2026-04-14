@@ -1,8 +1,20 @@
 <h3>会社責任者メニュー</h3>
 <p>自社の施術日管理と予約確認を行えます。</p>
 
-<ul>
-  <li><%= link_to '施術日一覧ページへ', treatment_days_path, class: "treatment-day-list" %></li>
-  <li><%= link_to '施術日登録ページへ', new_treatment_day_path, class: "treatment-day-new" %></li>
-  <li><%= link_to '予約一覧ページへ', reservations_path, class: "reservation-list" %></li>
-</ul>
+<div class="home-menu-groups">
+  <section class="home-menu-group">
+    <h4>施術管理</h4>
+    <p>自社の施術日の作成と状況確認を行います。</p>
+    <ul class="home-menu-list">
+      <li class="home-menu-item"><%= link_to '施術日一覧ページへ', treatment_days_path, class: "home-menu-link" %></li>
+      <li class="home-menu-item"><%= link_to '施術日登録ページへ', new_treatment_day_path, class: "home-menu-link" %></li>
+    </ul>
+  </section>
+  <section class="home-menu-group">
+    <h4>予約確認</h4>
+    <p>自社の予約状況を確認します。</p>
+    <ul class="home-menu-list">
+      <li class="home-menu-item"><%= link_to '予約一覧ページへ', reservations_path, class: "home-menu-link" %></li>
+    </ul>
+  </section>
+</div>

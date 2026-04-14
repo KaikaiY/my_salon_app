@@ -2,7 +2,7 @@
   <h2>サロンアプリへようこそ</h2>
 
   <% if user_signed_in? %>
-    <p><%= current_user.name %>さんが<%= current_user.human_role %>としてログイン中です。</p>
+    <p><%= current_user.name %>さんが、<%= current_user.human_role %>としてログイン中です。</p>
 
     <section class="home-menu">
       <% if current_user.admin? %>
