@@ -1,6 +1,8 @@
 <h1>施術日一覧</h1>
 
-<p><%= link_to "施術日登録ページへ", new_treatment_day_path %></p>
+<div class="page-actions">
+  <%= link_to "施術日登録ページへ", new_treatment_day_path, class: "button-link" %>
+</div>
 
 <% if @treatment_days.any? %>
   <div class="treatment-day-contents">
@@ -19,6 +21,8 @@
     </ul>
   </div>
 <% else %>
-  <p>まだ施術日は登録されていません。</p>
-  <p>施術日登録ページから新しい施術日を作成してください。</p>
+  <div class="empty-state">
+    <p>まだ施術日は登録されていません。</p>
+    <p>施術日登録ページから新しい施術日を作成してください。</p>
+  </div>
 <% end %>
