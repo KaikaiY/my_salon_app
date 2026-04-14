@@ -2,18 +2,23 @@
 
 <p><%= link_to "施術日登録ページへ", new_treatment_day_path %></p>
 
-<div class="treatment-day-contents">
-  <ul class="treatment-day-lists">
-    <% @treatment_days.each do |treatment_day| %>
-      <%= link_to treatment_day_path(treatment_day) do %>
-        <li class="treatment-day-list">
-          <div>施術日:<%= treatment_day.date %></div>
-          <div>会社:<%= treatment_day.company.company_name %></div>
-          <div>担当施術者:<%= treatment_day.therapist&.name || "未割当" %></div>
-          <div>予約受付元:<%= treatment_day.human_booking_source %></div>
-          <div>ステータス:<%= treatment_day.human_status %></div>
-        </li>
+<% if @treatment_days.any? %>
+  <div class="treatment-day-contents">
+    <ul class="treatment-day-lists">
+      <% @treatment_days.each do |treatment_day| %>
+        <%= link_to treatment_day_path(treatment_day) do %>
+          <li class="treatment-day-list">
+            <div>施術日:<%= treatment_day.date %></div>
+            <div>会社:<%= treatment_day.company.company_name %></div>
+            <div>担当施術者:<%= treatment_day.therapist&.name || "未割当" %></div>
+            <div>予約受付元:<%= treatment_day.human_booking_source %></div>
+            <div>ステータス:<%= treatment_day.human_status %></div>
+          </li>
+        <% end %>
       <% end %>
-    <% end %>
-  </ul>
-</div>
+    </ul>
+  </div>
+<% else %>
+  <p>まだ施術日は登録されていません。</p>
+  <p>施術日登録ページから新しい施術日を作成してください。</p>
+<% end %>

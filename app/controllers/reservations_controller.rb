@@ -19,7 +19,7 @@ class ReservationsController < ApplicationController
     @reservation = current_user.reservations.new(reservation_params.merge(time_slot: @time_slot, status: :reserved))
 
     if @reservation.save
-      redirect_to reservation_path(@reservation), notice: "予約しました"
+      redirect_to reservation_path(@reservation), notice: "予約しました。予約内容を確認してください。"
     else
       render :new, status: :unprocessable_content
     end
@@ -28,7 +28,7 @@ class ReservationsController < ApplicationController
   def cancel
     if @reservation.reserved?
       @reservation.update(status: :cancelled)
-      redirect_to reservation_path(@reservation), notice: "予約をキャンセルしました"
+      redirect_to reservation_path(@reservation), notice: "予約をキャンセルしました。"
     else
       redirect_to reservation_path(@reservation), alert: "この予約はキャンセルできません"
     end
