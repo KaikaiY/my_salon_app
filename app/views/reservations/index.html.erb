@@ -1,7 +1,7 @@
 <h1>予約一覧</h1>
 
 <% if @reservations.any? %>
-  <table>
+  <table class="data-table">
     <thead>
       <tr>
         <th>施術日</th>
@@ -17,7 +17,7 @@
       <% @reservations.each do |reservation| %>
         <tr>
           <td><%= reservation.time_slot.treatment_day.date %></td>
-          <td>
+          <td class="time-range">
             <%= reservation.time_slot.start_time.strftime("%H:%M") %>
             -
             <%= reservation.time_slot.end_time.strftime("%H:%M") %>
@@ -25,13 +25,13 @@
           <td><%= reservation.time_slot.treatment_day.company.company_name %></td>
           <td><%= reservation.time_slot.treatment_day.therapist&.name || "未割当" %></td>
           <td><%= reservation.user.name %></td>
-          <td><%= reservation.human_status %></td>
-          <td>
-            <%= link_to "詳細", reservation_path(reservation) %>
+          <td class="status-cell"><span class="status-chip"><%= reservation.human_status %></span></td>
+          <td class="action-cell">
+            <%= link_to "詳細", reservation_path(reservation), class: "inline-action" %>
             <% if reservation.reserved? %>
-              |
               <%= link_to "キャンセルする",
                           cancel_reservation_path(reservation),
+                          class: "inline-action danger-action",
                           data: {
                             turbo_method: :patch,
                             turbo_confirm: "この予約をキャンセルしますか？"
@@ -43,5 +43,7 @@
     </tbody>
   </table>
 <% else %>
-  <p>表示できる予約はまだありません。</p>
+  <div class="empty-state">
+    <p>表示できる予約はまだありません。</p>
+  </div>
 <% end %>

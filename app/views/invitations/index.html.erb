@@ -1,9 +1,11 @@
 <h2>招待一覧</h2>
 
-<p><%= link_to "新しい招待を作成", new_invitation_path %></p>
+<div class="page-actions">
+  <%= link_to "新しい招待を作成", new_invitation_path, class: "button-link" %>
+</div>
 
 <% if @invitations.any? %>
-  <table>
+  <table class="data-table">
     <thead>
       <tr>
         <th>メールアドレス</th>
@@ -19,21 +21,21 @@
         <tr>
           <td><%= invitation.email %></td>
           <td><%= invitation.company&.company_name || "未設定" %></td>
-          <td><%= invitation.human_role %></td>
-          <td>
-            <p><%= invitation.human_status %></p>
+          <td class="role-cell"><%= invitation.human_role %></td>
+          <td class="status-cell">
+            <p class="status-label"><%= invitation.human_status %></p>
             <% if invitation.pending? %>
-              <p>まだ登録申請されていません</p>
+              <p class="status-note">未申請です</p>
             <% elsif invitation.accepted? %>
-              <p>管理者の承認待ちです</p>
+              <p class="status-note">承認待ちです</p>
             <% elsif invitation.approved? %>
-              <p>ログイン可能です</p>
+              <p class="status-note">ログイン可能です</p>
             <% elsif invitation.expired? %>
-              <p>この招待URLは使用できません</p>
+              <p class="status-note">この招待URLは使用できません</p>
             <% end %>
           </td>
-          <td>
-            <%= new_user_registration_url(invitation_token: invitation.token) %>
+          <td class="url-cell">
+            <p class="inline-code"><%= new_user_registration_url(invitation_token: invitation.token) %></p>
             <button
               type="button"
               class="copy-invitation-url"
@@ -41,13 +43,13 @@
               URLをコピー
             </button>
           </td>
-          <td>
+          <td class="action-cell approval-cell">
             <% if invitation.accepted? && invitation.user.present? %>
               <%= button_to "承認する", approve_invitation_path(invitation), method: :patch %>
             <% elsif invitation.approved? %>
               承認済みです
             <% elsif invitation.pending? %>
-              登録申請待ちです
+              申請待ちです
             <% elsif invitation.expired? %>
               承認できません
             <% else %>
@@ -59,6 +61,8 @@
     </tbody>
   </table>
 <% else %>
-  <p>まだ招待は作成されていません。</p>
-  <p>新しい招待を作成して、対象ユーザーに登録URLを共有してください。</p>
+  <div class="empty-state">
+    <p>まだ招待は作成されていません。</p>
+    <p>新しい招待を作成して、対象ユーザーに登録URLを共有してください。</p>
+  </div>
 <% end %>

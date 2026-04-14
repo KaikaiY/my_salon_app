@@ -1,5 +1,7 @@
 <h1>会社一覧</h1>
-<%= link_to '会社登録ページへ', new_company_path, class: "company-record"%>
+<div class="page-actions">
+  <%= link_to '会社登録ページへ', new_company_path, class: "button-link company-record"%>
+</div>
 <% if @companies.any? %>
   <div class="company-contents">
     <ul class="company-lists">
@@ -21,6 +23,8 @@
     </ul>
   </div>
 <% else %>
-  <p>まだ会社は登録されていません。</p>
-  <p>会社登録ページから最初の会社を登録してください。</p>
+  <div class="empty-state">
+    <p>まだ会社は登録されていません。</p>
+    <p>会社登録ページから最初の会社を登録してください。</p>
+  </div>
 <% end %>

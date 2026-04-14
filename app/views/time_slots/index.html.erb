@@ -1,7 +1,7 @@
 <h1>予約可能枠一覧</h1>
 
 <% if @time_slots.any? %>
-  <table>
+  <table class="data-table">
     <thead>
       <tr>
         <th>施術日</th>
@@ -17,16 +17,16 @@
           <td><%= time_slot.treatment_day.date %></td>
           <td><%= time_slot.treatment_day.company.company_name %></td>
           <td><%= time_slot.treatment_day.therapist&.name || "未割当" %></td>
-          <td>
+          <td class="time-range">
             <%= time_slot.start_time.strftime("%H:%M") %>
             -
             <%= time_slot.end_time.strftime("%H:%M") %>
           </td>
-          <td>
+          <td class="action-cell">
             <% if current_user.employee? %>
-              <%= link_to "この時間を予約する", new_treatment_day_time_slot_reservation_path(time_slot.treatment_day, time_slot) %>
+              <%= link_to "この時間を予約する", new_treatment_day_time_slot_reservation_path(time_slot.treatment_day, time_slot), class: "inline-action" %>
             <% else %>
-              <%= link_to "施術日詳細", treatment_day_path(time_slot.treatment_day) %>
+              <%= link_to "施術日詳細", treatment_day_path(time_slot.treatment_day), class: "inline-action" %>
             <% end %>
           </td>
         </tr>
@@ -34,5 +34,7 @@
     </tbody>
   </table>
 <% else %>
-  <p>表示できる時間枠はありません。</p>
+  <div class="empty-state">
+    <p>表示できる時間枠はありません。</p>
+  </div>
 <% end %>
