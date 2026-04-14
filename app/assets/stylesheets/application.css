@@ -362,8 +362,19 @@ tr:last-child td {
 }
 
 .danger-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 10px;
   background: #fff1f0;
   color: var(--alert-text);
+  font-weight: 700;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .danger-action:hover {
@@ -635,6 +646,14 @@ ul {
   flex-wrap: wrap;
   gap: 12px;
   margin-top: 24px;
+}
+
+.detail-actions form {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 .detail-note {
