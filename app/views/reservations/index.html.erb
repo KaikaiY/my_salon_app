@@ -25,7 +25,7 @@
           <td><%= reservation.time_slot.treatment_day.company.company_name %></td>
           <td><%= reservation.time_slot.treatment_day.therapist&.name || "未割当" %></td>
           <td><%= reservation.user.name %></td>
-          <td class="status-cell"><span class="status-chip"><%= reservation.human_status %></span></td>
+          <td class="status-cell"><span class="<%= status_label_classes(reservation.status) %>"><%= reservation.human_status %></span></td>
           <td class="action-cell">
             <%= link_to "詳細", reservation_path(reservation), class: "inline-action" %>
             <% if reservation.reserved? %>

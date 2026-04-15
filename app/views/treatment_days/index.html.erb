@@ -28,7 +28,7 @@
             </div>
             <div class="card-item">
               <p class="card-label">ステータス</p>
-              <p class="card-value"><%= treatment_day.human_status %></p>
+              <p class="card-value"><span class="<%= status_label_classes(treatment_day.status) %>"><%= treatment_day.human_status %></span></p>
             </div>
             <p class="card-hint">クリックして詳細を表示</p>
           </li>

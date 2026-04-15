@@ -32,7 +32,7 @@
     </div>
     <div class="detail-item">
       <p class="detail-label">ステータス</p>
-      <p class="detail-value"><%= @reservation.human_status %></p>
+      <p class="detail-value"><span class="<%= status_label_classes(@reservation.status) %>"><%= @reservation.human_status %></span></p>
     </div>
     <div class="detail-item">
       <p class="detail-label">メモ</p>

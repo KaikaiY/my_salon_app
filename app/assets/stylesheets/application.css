@@ -311,6 +311,37 @@ tr:last-child td {
   white-space: nowrap;
 }
 
+.status-neutral {
+  background: var(--surface-muted);
+  color: var(--primary-dark);
+}
+
+.status-pending {
+  background: #fff4d6;
+  color: #8a5b00;
+}
+
+.status-accepted,
+.status-warning {
+  background: #fff0d9;
+  color: #8a5610;
+}
+
+.status-positive {
+  background: var(--success-bg);
+  color: var(--success-text);
+}
+
+.status-active {
+  background: #e7f1fb;
+  color: var(--primary-dark);
+}
+
+.status-negative {
+  background: var(--alert-bg);
+  color: var(--alert-text);
+}
+
 .inline-code {
   max-width: 280px;
   padding: 10px 12px;
