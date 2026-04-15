@@ -24,7 +24,7 @@
     </div>
     <div class="detail-item">
       <p class="detail-label">ステータス</p>
-      <p class="detail-value"><%= @treatment_day.human_status %></p>
+      <p class="detail-value"><span class="<%= status_label_classes(@treatment_day.status) %>"><%= @treatment_day.human_status %></span></p>
     </div>
     <div class="detail-item">
       <p class="detail-label">メモ</p>
@@ -66,13 +66,13 @@
       <li class="detail-subitem">
         <span class="time-range"><%= time_slot.start_time.strftime("%H:%M") %> 〜 <%= time_slot.end_time.strftime("%H:%M") %></span>
         <% if @treatment_day.cancelled? %>
-          <span class="status-chip">操作不可</span>
+          <span class="status-chip status-negative">操作不可</span>
         <% else %>
           <%= link_to "編集", edit_treatment_day_time_slot_path(@treatment_day, time_slot), class: "inline-action" %>
         <% end %>
 
         <% if time_slot.reservations.exists? %>
-          <span class="status-chip">予約履歴あり</span>
+          <span class="status-chip status-warning">予約履歴あり</span>
         <% elsif !@treatment_day.cancelled? %>
           <%= link_to "削除",
                       treatment_day_time_slot_path(@treatment_day, time_slot),

@@ -23,7 +23,7 @@
           <td><%= invitation.company&.company_name || "未設定" %></td>
           <td class="role-cell"><%= invitation.human_role %></td>
           <td class="status-cell">
-            <p class="status-label"><%= invitation.human_status %></p>
+            <p class="<%= status_label_classes(invitation.status, base: 'status-label') %>"><%= invitation.human_status %></p>
             <% if invitation.pending? %>
               <p class="status-note">未申請です</p>
             <% elsif invitation.accepted? %>
@@ -47,13 +47,13 @@
             <% if invitation.accepted? && invitation.user.present? %>
               <%= button_to "承認する", approve_invitation_path(invitation), method: :patch %>
             <% elsif invitation.approved? %>
-              承認済みです
+              <span class="status-chip status-positive">承認済みです</span>
             <% elsif invitation.pending? %>
-              申請待ちです
+              <span class="status-chip status-pending">申請待ちです</span>
             <% elsif invitation.expired? %>
-              承認できません
+              <span class="status-chip status-negative">承認できません</span>
             <% else %>
-              承認できません
+              <span class="status-chip status-negative">承認できません</span>
             <% end %>
           </td>
         </tr>
