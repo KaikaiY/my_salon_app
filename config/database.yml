@@ -50,6 +50,5 @@ test:
 #
 production:
   <<: *default
-  database: my_salon_app_production
-  username: my_salon_app
-  password: <%= ENV["MY_SALON_APP_DATABASE_PASSWORD"] %>
+  adapter: postgresql
+  url: <%= ENV['DATABASE_URL'] %>
