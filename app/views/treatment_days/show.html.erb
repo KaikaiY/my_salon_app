@@ -86,5 +86,10 @@
     <% end %>
   </ul>
 <% else %>
-  <p>時間枠はまだ登録されていません。</p>
+  <div class="empty-state detail-card-centered">
+    <p>時間枠はまだ登録されていません。</p>
+    <% unless @treatment_day.cancelled? %>
+      <p>時間枠を追加すると、この施術日に予約できる時間を公開できます。</p>
+    <% end %>
+  </div>
 <% end %>
