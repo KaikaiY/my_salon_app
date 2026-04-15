@@ -45,5 +45,10 @@
 <% else %>
   <div class="empty-state">
     <p>表示できる予約はまだありません。</p>
+    <% if current_user.employee? %>
+      <p>予約可能枠一覧から予約すると、ここに自分の予約が表示されます。</p>
+    <% else %>
+      <p>予約が入ると、ここから内容の確認や対応に進めます。</p>
+    <% end %>
   </div>
 <% end %>
