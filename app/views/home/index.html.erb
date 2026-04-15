@@ -22,7 +22,10 @@
       <% end %>
     </section>
   <% else %>
-    <p>ログインしていません</p>
-    <p><%= link_to "ログイン画面へ", new_user_session_path %></p>
+    <div class="empty-state">
+      <p>ログインしていません。</p>
+      <p>ログインすると、役割に応じたメニューや管理画面を利用できます。</p>
+      <p><%= link_to "ログイン画面へ", new_user_session_path, class: "inline-action" %></p>
+    </div>
   <% end %>
 </section>
