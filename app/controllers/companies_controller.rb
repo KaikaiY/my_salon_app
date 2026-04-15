@@ -3,7 +3,6 @@ class CompaniesController < ApplicationController
   before_action :ensure_admin!
   before_action :set_company, only: [:show, :edit, :update, :destroy]
 
-
   def index
     @companies = Company.all
   end
@@ -43,8 +42,6 @@ class CompaniesController < ApplicationController
     end
   end
 
-
-
   private
 
   def set_company
@@ -54,5 +51,4 @@ class CompaniesController < ApplicationController
   def company_params
     params.require(:company).permit(:company_name, :email, :phone)
   end
-
 end

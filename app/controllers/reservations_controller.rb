@@ -19,7 +19,7 @@ class ReservationsController < ApplicationController
     @reservation = current_user.reservations.new(reservation_params.merge(time_slot: @time_slot, status: :reserved))
 
     if @reservation.save
-      redirect_to reservation_path(@reservation), notice: "予約しました。予約内容を確認してください。"
+      redirect_to reservation_path(@reservation), notice: '予約しました。予約内容を確認してください。'
     else
       render :new, status: :unprocessable_content
     end
@@ -28,9 +28,9 @@ class ReservationsController < ApplicationController
   def cancel
     if @reservation.reserved?
       @reservation.update(status: :cancelled)
-      redirect_to reservation_path(@reservation), notice: "予約をキャンセルしました。"
+      redirect_to reservation_path(@reservation), notice: '予約をキャンセルしました。'
     else
-      redirect_to reservation_path(@reservation), alert: "この予約はキャンセルできません"
+      redirect_to reservation_path(@reservation), alert: 'この予約はキャンセルできません'
     end
   end
 
@@ -39,26 +39,26 @@ class ReservationsController < ApplicationController
   def ensure_employee!
     return if current_user&.employee?
 
-    redirect_to root_path, alert: "権限がありません"
+    redirect_to root_path, alert: '権限がありません'
   end
 
   def set_time_slot
     @treatment_day = TreatmentDay.where(company: current_user.company).find_by(id: params[:treatment_day_id])
 
     unless @treatment_day
-      redirect_to root_path, alert: "予約できない施術日です"
+      redirect_to root_path, alert: '予約できない施術日です'
       return
     end
 
     @time_slot = @treatment_day.time_slots.find_by(id: params[:time_slot_id])
 
-    redirect_to root_path, alert: "予約できない時間枠です" unless @time_slot
+    redirect_to root_path, alert: '予約できない時間枠です' unless @time_slot
   end
 
   def set_reservation
     @reservation = reservation_scope.find_by(id: params[:id])
 
-    redirect_to reservations_path, alert: "予約が見つかりません" unless @reservation
+    redirect_to reservations_path, alert: '予約が見つかりません' unless @reservation
   end
 
   def reservation_scope

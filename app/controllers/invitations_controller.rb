@@ -15,7 +15,7 @@ class InvitationsController < ApplicationController
     @invitation = current_user.sent_invitations.build(invitation_params)
 
     if @invitation.save
-      redirect_to invitations_path, notice: "招待URLを作成しました。招待一覧から対象ユーザーに共有できます。"
+      redirect_to invitations_path, notice: '招待URLを作成しました。招待一覧から対象ユーザーに共有できます。'
     else
       render :new, status: :unprocessable_entity
     end
@@ -23,7 +23,7 @@ class InvitationsController < ApplicationController
 
   def approve
     unless @invitation.accepted? && @invitation.user.present?
-      redirect_to invitations_path, alert: "承認できる状態ではありません"
+      redirect_to invitations_path, alert: '承認できる状態ではありません'
       return
     end
 
@@ -32,7 +32,7 @@ class InvitationsController < ApplicationController
       @invitation.update!(status: :approved, approved_at: Time.current)
     end
 
-    redirect_to invitations_path, notice: "ユーザーを承認しました。対象ユーザーはログインできるようになりました。"
+    redirect_to invitations_path, notice: 'ユーザーを承認しました。対象ユーザーはログインできるようになりました。'
   end
 
   private

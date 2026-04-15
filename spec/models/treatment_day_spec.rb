@@ -45,7 +45,5 @@ RSpec.describe TreatmentDay, type: :model do
       expect(treatment_day).to be_invalid
       expect(treatment_day.errors[:created_by]).to be_present
     end
-
-
   end
 end

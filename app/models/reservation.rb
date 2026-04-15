@@ -1,8 +1,8 @@
 class Reservation < ApplicationRecord
   STATUS_LABELS = {
-    reserved: "予約中",
-    cancelled: "キャンセル済み",
-    completed: "完了"
+    reserved: '予約中',
+    cancelled: 'キャンセル済み',
+    completed: '完了'
   }.freeze
 
   belongs_to :user
@@ -28,8 +28,8 @@ class Reservation < ApplicationRecord
     return if time_slot.blank?
     return if cancelled?
 
-    if Reservation.where(time_slot: time_slot).where.not(status: :cancelled).where.not(id: id).exists?
-      errors.add(:time_slot, "はすでに予約されています")
-    end
+    return unless Reservation.where(time_slot: time_slot).where.not(status: :cancelled).where.not(id: id).exists?
+
+    errors.add(:time_slot, 'はすでに予約されています')
   end
 end

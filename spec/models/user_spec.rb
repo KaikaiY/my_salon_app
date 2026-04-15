@@ -50,13 +50,12 @@ RSpec.describe User, type: :model do
 
       expect(user.errors[:company]).to be_present
     end
-    
   end
 
   describe '#active_for_authentication?' do
     it 'active が true のとき true を返すこと' do
       user = FactoryBot.build(:user, active: true)
-      expect(user.active_for_authentication?).to be true  
+      expect(user.active_for_authentication?).to be true
     end
 
     it 'active が false のとき false を返すこと' do

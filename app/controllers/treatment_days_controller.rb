@@ -20,7 +20,7 @@ class TreatmentDaysController < ApplicationController
     assign_company_for_company_manager
 
     if @treatment_day.save
-      redirect_to treatment_day_path(@treatment_day), notice: "施術日を登録しました。時間枠の作成に進めます。"
+      redirect_to treatment_day_path(@treatment_day), notice: '施術日を登録しました。時間枠の作成に進めます。'
     else
       render :new, status: :unprocessable_entity
     end
@@ -33,7 +33,7 @@ class TreatmentDaysController < ApplicationController
     assign_company_for_company_manager
 
     if @treatment_day.update(treatment_day_params)
-      redirect_to treatment_day_path(@treatment_day), notice: "施術日を更新しました。"
+      redirect_to treatment_day_path(@treatment_day), notice: '施術日を更新しました。'
     else
       render :edit, status: :unprocessable_entity
     end
@@ -41,22 +41,22 @@ class TreatmentDaysController < ApplicationController
 
   def cancel
     if @treatment_day.cancelled?
-      redirect_to treatment_day_path(@treatment_day), alert: "この施術日はすでに中止されています"
+      redirect_to treatment_day_path(@treatment_day), alert: 'この施術日はすでに中止されています'
     else
       @treatment_day.update(status: :cancelled)
       cancel_reserved_reservations
-      redirect_to treatment_day_path(@treatment_day), notice: "施術日を中止しました。関連する予約中の予約もキャンセルされました。"
+      redirect_to treatment_day_path(@treatment_day), notice: '施術日を中止しました。関連する予約中の予約もキャンセルされました。'
     end
   end
 
   def reopen
     unless @treatment_day.cancelled?
-      redirect_to treatment_day_path(@treatment_day), alert: "この施術日は再開できません"
+      redirect_to treatment_day_path(@treatment_day), alert: 'この施術日は再開できません'
       return
     end
 
     @treatment_day.update(status: :pending)
-    redirect_to treatment_day_path(@treatment_day), notice: "施術日を再開しました。必要に応じて時間枠や予約状況を確認してください。"
+    redirect_to treatment_day_path(@treatment_day), notice: '施術日を再開しました。必要に応じて時間枠や予約状況を確認してください。'
   end
 
   private
@@ -64,9 +64,8 @@ class TreatmentDaysController < ApplicationController
   def set_treatment_day
     @treatment_day = treatment_day_scope.find_by(id: params[:id])
 
-    redirect_to root_path, alert: "権限がありません" unless @treatment_day
+    redirect_to root_path, alert: '権限がありません' unless @treatment_day
   end
-
 
   def treatment_day_params
     permitted_params = params.require(:treatment_day).permit(:date, :booking_source, :status, :note, :company_id, :therapist_id)
@@ -88,6 +87,4 @@ class TreatmentDaysController < ApplicationController
       end
     end
   end
-
-  
 end

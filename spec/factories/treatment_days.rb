@@ -3,7 +3,7 @@ FactoryBot.define do
     date { Date.current }
     booking_source { :app }
     status { :pending }
-    note { "テストメモ" }
+    note { 'テストメモ' }
     company
     association :created_by, factory: %i[user admin]
     association :therapist, factory: %i[user therapist]
