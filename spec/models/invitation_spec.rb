@@ -46,15 +46,12 @@ RSpec.describe Invitation, type: :model do
 
       expect(invitation.errors[:company]).to be_present
     end
-
-
   end
 
   describe '#available_for_signup?' do
     it 'pending かつ有効期限内なら true を返すこと' do
       invitation = FactoryBot.build(:invitation, status: :pending)
       expect(invitation.available_for_signup?).to be true
-
     end
 
     it 'accepted なら false を返すこと' do
@@ -64,11 +61,10 @@ RSpec.describe Invitation, type: :model do
 
     it '有効期限切れなら false を返すこと' do
       invitation = FactoryBot.build(:invitation, expires_at: 1.day.ago)
-      expect(invitation.available_for_signup?).to be false                                                                                                                                      
+      expect(invitation.available_for_signup?).to be false
     end
   end
   describe '#mark_as_expired_if_needed!' do
-
     it '期限内の pending 招待は expired にしないこと' do
       invitation = FactoryBot.create(:invitation, status: :pending)
       invitation.mark_as_expired_if_needed!

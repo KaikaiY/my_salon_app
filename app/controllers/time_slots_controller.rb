@@ -6,7 +6,7 @@ class TimeSlotsController < ApplicationController
   before_action :set_time_slot, only: %i[edit update destroy]
 
   def index
-    @time_slots = time_slot_scope.includes(treatment_day: %i[company therapist]).order("treatment_days.date ASC", :start_time)
+    @time_slots = time_slot_scope.includes(treatment_day: %i[company therapist]).order('treatment_days.date ASC', :start_time)
   end
 
   def new
@@ -21,7 +21,7 @@ class TimeSlotsController < ApplicationController
 
     @time_slot = @treatment_day.time_slots.new(time_slot_params)
     if @time_slot.save
-      redirect_to treatment_day_path(@treatment_day), notice: "時間枠を登録しました。"
+      redirect_to treatment_day_path(@treatment_day), notice: '時間枠を登録しました。'
     else
       render :new, status: :unprocessable_content
     end
@@ -32,7 +32,7 @@ class TimeSlotsController < ApplicationController
 
   def update
     if @time_slot.update(time_slot_params)
-      redirect_to treatment_day_path(@treatment_day), notice: "時間枠を更新しました。"
+      redirect_to treatment_day_path(@treatment_day), notice: '時間枠を更新しました。'
     else
       render :edit, status: :unprocessable_content
     end
@@ -40,10 +40,10 @@ class TimeSlotsController < ApplicationController
 
   def destroy
     if @time_slot.reservations.exists?
-      redirect_to treatment_day_path(@treatment_day), alert: "予約履歴がある時間枠は削除できません"
+      redirect_to treatment_day_path(@treatment_day), alert: '予約履歴がある時間枠は削除できません'
     else
       @time_slot.destroy
-      redirect_to treatment_day_path(@treatment_day), notice: "時間枠を削除しました。"
+      redirect_to treatment_day_path(@treatment_day), notice: '時間枠を削除しました。'
     end
   end
 
@@ -60,7 +60,7 @@ class TimeSlotsController < ApplicationController
     time_slots = build_bulk_time_slots
 
     if time_slots.empty?
-      @time_slot.errors.add(:base, "20分以上の時間を指定してください")
+      @time_slot.errors.add(:base, '20分以上の時間を指定してください')
       render :new, status: :unprocessable_content
       return
     end
@@ -120,23 +120,22 @@ class TimeSlotsController < ApplicationController
   def set_treatment_day
     @treatment_day = treatment_day_scope.find_by(id: params[:treatment_day_id])
 
-    redirect_to root_path, alert: "権限がありません" unless @treatment_day
+    redirect_to root_path, alert: '権限がありません' unless @treatment_day
   end
 
   def set_time_slot
     @time_slot = @treatment_day.time_slots.find_by(id: params[:id])
 
-    redirect_to treatment_day_path(@treatment_day), alert: "時間枠が見つかりません" unless @time_slot
+    redirect_to treatment_day_path(@treatment_day), alert: '時間枠が見つかりません' unless @time_slot
   end
 
   def ensure_treatment_day_active!
     return unless @treatment_day&.cancelled?
 
-    redirect_to treatment_day_path(@treatment_day), alert: "中止された施術日の時間枠は操作できません"
+    redirect_to treatment_day_path(@treatment_day), alert: '中止された施術日の時間枠は操作できません'
   end
 
   def time_slot_params
     params.require(:time_slot).permit(:start_time, :end_time)
   end
-
 end

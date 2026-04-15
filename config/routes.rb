@@ -1,10 +1,9 @@
 Rails.application.routes.draw do
-  
   devise_for :users, controllers: {
-    registrations: "users/registrations"
+    registrations: 'users/registrations'
   }
-  
-  root "home#index"
+
+  root 'home#index'
   resources :companies
   resources :treatment_days, except: :destroy do
     patch :cancel, on: :member

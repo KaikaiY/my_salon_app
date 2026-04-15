@@ -1,21 +1,21 @@
 class Invitation < ApplicationRecord
   ROLE_LABELS = {
-    admin: "管理者",
-    therapist: "施術者",
-    company_manager: "会社責任者",
-    employee: "利用者"
+    admin: '管理者',
+    therapist: '施術者',
+    company_manager: '会社責任者',
+    employee: '利用者'
   }.freeze
 
   STATUS_LABELS = {
-    pending: "受付中",
-    accepted: "登録申請済み",
-    approved: "承認済み",
-    expired: "期限切れ"
+    pending: '受付中',
+    accepted: '登録申請済み',
+    approved: '承認済み',
+    expired: '期限切れ'
   }.freeze
 
   belongs_to :company, optional: true
   belongs_to :user, optional: true
-  belongs_to :invited_by, class_name: "User"
+  belongs_to :invited_by, class_name: 'User'
 
   enum :role, {
     admin: 0,
@@ -36,7 +36,7 @@ class Invitation < ApplicationRecord
   before_validation :assign_token, on: :create
   before_validation :set_default_expiration, on: :create
 
-  validates :email, presence: true, 
+  validates :email, presence: true,
                     length: { maximum: 255 },
                     format: { with: VALID_EMAIL_REGEX }
   validates :token, presence: true, uniqueness: true
@@ -45,8 +45,6 @@ class Invitation < ApplicationRecord
   validate :expires_at_in_future
   validate :admin_role_cannot_be_selected
   validates :company, presence: true, if: :company_required?
-
-  
 
   scope :recent_first, -> { order(created_at: :desc) }
 
@@ -63,7 +61,7 @@ class Invitation < ApplicationRecord
   end
 
   def self.role_options_excluding_admin
-    roles.keys.excluding("admin").map { |role| [ROLE_LABELS[role.to_sym], role] }
+    roles.keys.excluding('admin').map { |role| [ROLE_LABELS[role.to_sym], role] }
   end
 
   def mark_as_expired_if_needed!
@@ -83,15 +81,15 @@ class Invitation < ApplicationRecord
   end
 
   def expires_at_in_future
-    if expires_at.present? && expires_at < Time.current
-      errors.add(:expires_at, "は過去の日付です")
-    end
+    return unless expires_at.present? && expires_at < Time.current
+
+    errors.add(:expires_at, 'は過去の日付です')
   end
 
   def admin_role_cannot_be_selected
     return unless admin?
 
-    errors.add(:role, "は指定できません")
+    errors.add(:role, 'は指定できません')
   end
 
   def company_required?

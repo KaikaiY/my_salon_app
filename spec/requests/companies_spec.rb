@@ -1,14 +1,14 @@
 require 'rails_helper'
 
-RSpec.describe "Companies", type: :request do
+RSpec.describe 'Companies', type: :request do
   let(:company) { create(:company) }
 
   let(:valid_params) do
     {
       company: {
-        company_name: "テスト株式会社",
-        email: "test@example.com",
-        phone: "0312345678"
+        company_name: 'テスト株式会社',
+        email: 'test@example.com',
+        phone: '0312345678'
       }
     }
   end
@@ -17,20 +17,20 @@ RSpec.describe "Companies", type: :request do
     {
       company: {
         company_name: nil,
-        email: "invalid_email",
-        phone: "abc"
+        email: 'invalid_email',
+        phone: 'abc'
       }
     }
   end
 
-  describe "GET /index" do
-    it "未ログインだとログイン画面にリダイレクトされること" do
+  describe 'GET /index' do
+    it '未ログインだとログイン画面にリダイレクトされること' do
       get companies_path
 
       expect(response).to redirect_to(new_user_session_path)
     end
 
-    it "管理者はアクセスできること" do
+    it '管理者はアクセスできること' do
       admin = create(:user, :admin)
       sign_in admin
 
@@ -38,7 +38,7 @@ RSpec.describe "Companies", type: :request do
 
       expect(response).to have_http_status(:ok)
     end
-    it "管理者以外はトップにリダイレクトされること" do
+    it '管理者以外はトップにリダイレクトされること' do
       user = create(:user)
       sign_in user
 
@@ -48,13 +48,13 @@ RSpec.describe "Companies", type: :request do
     end
   end
 
-  describe "GET /new" do
-    it "未ログインだとログイン画面にリダイレクトされること" do
+  describe 'GET /new' do
+    it '未ログインだとログイン画面にリダイレクトされること' do
       get new_company_path
 
       expect(response).to redirect_to(new_user_session_path)
     end
-    it "管理者はアクセスできること" do
+    it '管理者はアクセスできること' do
       admin = create(:user, :admin)
       sign_in admin
 
@@ -62,7 +62,7 @@ RSpec.describe "Companies", type: :request do
 
       expect(response).to have_http_status(:ok)
     end
-    it "管理者以外はトップにリダイレクトされること" do
+    it '管理者以外はトップにリダイレクトされること' do
       user = create(:user)
       sign_in user
 
@@ -70,15 +70,14 @@ RSpec.describe "Companies", type: :request do
 
       expect(response).to redirect_to(root_path)
     end
-
   end
 
-  describe "POST /create" do
-    it "未ログインだとログイン画面にリダイレクトされること" do
+  describe 'POST /create' do
+    it '未ログインだとログイン画面にリダイレクトされること' do
       post companies_path, params: valid_params
       expect(response).to redirect_to(new_user_session_path)
     end
-    it "管理者は会社が作られること" do
+    it '管理者は会社が作られること' do
       admin = create(:user, :admin)
       sign_in admin
 
@@ -88,7 +87,7 @@ RSpec.describe "Companies", type: :request do
 
       expect(response).to redirect_to(companies_path)
     end
-    it "管理者以外はトップにリダイレクトされること" do
+    it '管理者以外はトップにリダイレクトされること' do
       user = create(:user)
       sign_in user
 
@@ -100,13 +99,13 @@ RSpec.describe "Companies", type: :request do
     end
   end
 
-  describe "GET /show" do
-    it "未ログインだとログイン画面にリダイレクトされること" do
+  describe 'GET /show' do
+    it '未ログインだとログイン画面にリダイレクトされること' do
       get company_path(company)
 
       expect(response).to redirect_to(new_user_session_path)
     end
-    it "管理者はアクセスできること" do
+    it '管理者はアクセスできること' do
       admin = create(:user, :admin)
       sign_in admin
 
@@ -114,7 +113,7 @@ RSpec.describe "Companies", type: :request do
 
       expect(response).to have_http_status(:ok)
     end
-    it "管理者以外はトップにリダイレクトされること" do
+    it '管理者以外はトップにリダイレクトされること' do
       user = create(:user)
       sign_in user
 
@@ -124,12 +123,12 @@ RSpec.describe "Companies", type: :request do
     end
   end
 
-  describe "GET /edit" do
-    it "未ログインだとログイン画面にリダイレクトされること" do
+  describe 'GET /edit' do
+    it '未ログインだとログイン画面にリダイレクトされること' do
       get edit_company_path(company)
       expect(response).to redirect_to(new_user_session_path)
     end
-    it "管理者はアクセスできること" do
+    it '管理者はアクセスできること' do
       admin = create(:user, :admin)
       sign_in admin
 
@@ -137,7 +136,7 @@ RSpec.describe "Companies", type: :request do
 
       expect(response).to have_http_status(:ok)
     end
-    it "管理者以外はトップにリダイレクトされること" do
+    it '管理者以外はトップにリダイレクトされること' do
       user = create(:user)
       sign_in user
 
@@ -147,29 +146,29 @@ RSpec.describe "Companies", type: :request do
     end
   end
 
-  describe "PATCH /update" do
-    it "未ログインだとログイン画面にリダイレクトされること" do
+  describe 'PATCH /update' do
+    it '未ログインだとログイン画面にリダイレクトされること' do
       patch company_path(company), params: valid_params
       expect(response).to redirect_to(new_user_session_path)
     end
-    it "管理者は会社が更新できること" do
+    it '管理者は会社が更新できること' do
       admin = create(:user, :admin)
       sign_in admin
 
       patch company_path(company), params: {
         company: {
-          company_name: "更新後会社名",
-          email: "updated@example.com",
-          phone: "09012345678"
+          company_name: '更新後会社名',
+          email: 'updated@example.com',
+          phone: '09012345678'
         }
       }
 
       expect(response).to redirect_to(company_path(company))
-      expect(company.reload.company_name).to eq("更新後会社名")
-      expect(company.reload.email).to eq("updated@example.com")
-      expect(company.reload.phone).to eq("09012345678")
+      expect(company.reload.company_name).to eq('更新後会社名')
+      expect(company.reload.email).to eq('updated@example.com')
+      expect(company.reload.phone).to eq('09012345678')
     end
-    it "管理者以外はトップにリダイレクトされること" do
+    it '管理者以外はトップにリダイレクトされること' do
       user = create(:user)
       sign_in user
 
@@ -182,12 +181,12 @@ RSpec.describe "Companies", type: :request do
     end
   end
 
-  describe "DELETE /destroy" do
-    it "未ログインだとログイン画面にリダイレクトされること" do
+  describe 'DELETE /destroy' do
+    it '未ログインだとログイン画面にリダイレクトされること' do
       delete company_path(company)
       expect(response).to redirect_to(new_user_session_path)
     end
-    it "管理者は会社が削除できること" do
+    it '管理者は会社が削除できること' do
       company
       admin = create(:user, :admin)
       sign_in admin
@@ -198,7 +197,7 @@ RSpec.describe "Companies", type: :request do
 
       expect(response).to redirect_to(companies_path)
     end
-    it "管理者以外はトップにリダイレクトされること" do
+    it '管理者以外はトップにリダイレクトされること' do
       company
       user = create(:user)
       sign_in user

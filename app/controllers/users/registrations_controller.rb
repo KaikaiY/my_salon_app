@@ -3,12 +3,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def new
     unless valid_invitation?
-      redirect_to root_path, alert: "有効な招待URLから登録してください"
+      redirect_to root_path, alert: '有効な招待URLから登録してください'
       return
     end
 
     build_resource(email: @invitation.email)
-    resource.name = ""
+    resource.name = ''
     clean_up_passwords resource
     set_minimum_password_length
   end
@@ -17,7 +17,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     unless valid_invitation?
       build_resource
       resource.validate
-      redirect_to root_path, alert: "招待URLの有効期限が切れているか、無効です"
+      redirect_to root_path, alert: '招待URLの有効期限が切れているか、無効です'
       return
     end
 
@@ -29,7 +29,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
     if resource.save
       @invitation.update!(status: :accepted, accepted_at: Time.current, user: resource)
-      redirect_to new_user_session_path, notice: "登録申請を受け付けました。管理者の承認後にログインできます。"
+      redirect_to new_user_session_path, notice: '登録申請を受け付けました。管理者の承認後にログインできます。'
     else
       clean_up_passwords resource
       set_minimum_password_length

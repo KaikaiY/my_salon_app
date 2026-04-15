@@ -36,7 +36,7 @@ RSpec.describe Reservation, type: :model do
       expect(reservation).to be_invalid
       expect(reservation.errors[:time_slot]).to be_present
     end
-    
+
     it '同じ time_slot でも既存予約が cancelled なら有効であること' do
       time_slot = create(:time_slot)
       create(:reservation, :cancelled, time_slot: time_slot)

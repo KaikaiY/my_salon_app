@@ -11,7 +11,6 @@ RSpec.describe Company, type: :model do
       company.valid?
 
       expect(company.errors[:company_name]).to be_present
-
     end
 
     it 'email がないと無効であること' do
@@ -38,7 +37,6 @@ RSpec.describe Company, type: :model do
     it 'phone が10桁の数字なら有効であること' do
       company = build(:company, phone: '1234567890')
       expect(company).to be_valid
-
     end
     it 'phone が11桁の数字なら有効であること' do
       company = FactoryBot.build(:company, phone: '12345678901')

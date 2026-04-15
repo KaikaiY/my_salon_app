@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   def ensure_admin!
     return if current_user&.admin?
 
-    redirect_to root_path, alert: "権限がありません"
+    redirect_to root_path, alert: '権限がありません'
   end
 
   def treatment_day_scope
@@ -15,11 +15,10 @@ class ApplicationController < ActionController::Base
     TreatmentDay.where(company: current_user.company)
   end
 
-
   def ensure_treatment_day_manager!
     return if current_user&.admin? || current_user&.company_manager?
 
-    redirect_to root_path, alert: "権限がありません"
+    redirect_to root_path, alert: '権限がありません'
   end
 
   def configure_permitted_parameters
