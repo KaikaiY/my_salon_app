@@ -568,6 +568,29 @@ ul {
   margin-top: 24px;
 }
 
+.home-role-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.home-intro {
+  margin-bottom: 0;
+  color: var(--text-muted);
+}
+
+.home-next-step {
+  margin-bottom: 0;
+  padding: 12px 14px;
+  background: #f4f8fc;
+  border: 1px dashed #c9d7e6;
+  border-radius: 14px;
+  color: var(--primary-dark);
+  font-size: 0.95rem;
+}
+
 .home-menu-groups {
   display: grid;
   gap: 18px;
