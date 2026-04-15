@@ -36,5 +36,10 @@
 <% else %>
   <div class="empty-state">
     <p>表示できる時間枠はありません。</p>
+    <% if current_user.employee? %>
+      <p>予約可能な時間枠が公開されると、ここから予約に進めます。</p>
+    <% else %>
+      <p>施術日や時間枠が登録されると、ここに表示されます。</p>
+    <% end %>
   </div>
 <% end %>
