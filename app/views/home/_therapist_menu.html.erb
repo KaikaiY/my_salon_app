@@ -9,6 +9,11 @@
     <ul class="home-menu-list">
       <li class="home-menu-item"><%= link_to '時間枠一覧ページへ', time_slots_path, class: "home-menu-link" %></li>
       <li class="home-menu-item"><%= link_to '予約一覧ページへ', reservations_path, class: "home-menu-link" %></li>
+      <% if current_user.therapist_profile.present? %>
+        <li class="home-menu-item"><%= link_to 'プロフィール編集ページへ', edit_therapist_profile_path(current_user.therapist_profile), class: "home-menu-link" %></li>
+      <% else %>
+        <li class="home-menu-item"><%= link_to 'プロフィール登録ページへ', new_therapist_profile_path, class: "home-menu-link" %></li>
+      <% end %>
     </ul>
   </section>
 </div>

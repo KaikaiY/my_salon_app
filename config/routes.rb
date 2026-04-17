@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   root 'home#index'
   resources :companies
+  resources :therapist_profiles, except: :destroy
   resources :treatment_days, except: :destroy do
     patch :cancel, on: :member
     patch :reopen, on: :member

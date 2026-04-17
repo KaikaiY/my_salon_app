@@ -16,7 +16,13 @@
     </div>
     <div class="detail-item">
       <p class="detail-label">担当施術者</p>
-      <p class="detail-value"><%= @treatment_day.therapist&.name || "未割当" %></p>
+      <p class="detail-value">
+        <% if @treatment_day.therapist&.therapist_profile.present? && (@treatment_day.therapist.therapist_profile.published? || current_user&.admin?) %>
+          <%= link_to @treatment_day.therapist.name, therapist_profile_path(@treatment_day.therapist.therapist_profile) %>
+        <% else %>
+          <%= @treatment_day.therapist&.name || '未割当' %>
+        <% end %>
+      </p>
     </div>
     <div class="detail-item">
       <p class="detail-label">予約受付元</p>

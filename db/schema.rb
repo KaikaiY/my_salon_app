@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_04_10_060713) do
+ActiveRecord::Schema[7.1].define(version: 2026_04_17_033340) do
   create_table "companies", charset: "utf8mb3", force: :cascade do |t|
     t.string "company_name", null: false
     t.string "email", null: false
@@ -50,6 +50,17 @@ ActiveRecord::Schema[7.1].define(version: 2026_04_10_060713) do
     t.datetime "updated_at", null: false
     t.index ["time_slot_id"], name: "index_reservations_on_time_slot_id"
     t.index ["user_id"], name: "index_reservations_on_user_id"
+  end
+
+  create_table "therapist_profiles", charset: "utf8mb3", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.text "bio", null: false
+    t.string "specialty", null: false
+    t.text "career", null: false
+    t.boolean "published", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_therapist_profiles_on_user_id", unique: true
   end
 
   create_table "time_slots", charset: "utf8mb3", force: :cascade do |t|
@@ -99,6 +110,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_04_10_060713) do
   add_foreign_key "invitations", "users", column: "invited_by_id"
   add_foreign_key "reservations", "time_slots"
   add_foreign_key "reservations", "users"
+  add_foreign_key "therapist_profiles", "users"
   add_foreign_key "time_slots", "treatment_days"
   add_foreign_key "treatment_days", "companies"
   add_foreign_key "treatment_days", "users", column: "created_by_id"

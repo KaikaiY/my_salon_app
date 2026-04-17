@@ -8,6 +8,14 @@
     <div class="business-form-intro">
       <p>施術日: <%= @treatment_day.date %></p>
       <p>
+        担当施術者:
+        <% if @treatment_day.therapist&.therapist_profile.present? && (@treatment_day.therapist.therapist_profile.published? || current_user&.admin?) %>
+          <%= link_to @treatment_day.therapist.name, therapist_profile_path(@treatment_day.therapist.therapist_profile) %>
+        <% else %>
+          <%= @treatment_day.therapist&.name || '未割当' %>
+        <% end %>
+      </p>
+      <p>
         時間:
         <%= @time_slot.start_time.strftime("%H:%M") %>
         -

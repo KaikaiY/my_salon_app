@@ -1,0 +1,15 @@
+<section class="business-form-page">
+  <div class="business-form-card">
+    <div class="page-actions page-actions-left">
+      <%= link_to '施術者プロフィール一覧へ戻る', therapist_profiles_path, class: 'inline-action' %>
+    </div>
+
+    <h1>施術者プロフィール登録</h1>
+    <div class="business-form-intro">
+      <p>施術者の自己紹介や得意分野を登録します。</p>
+      <p>公開すると、施術日や予約画面からプロフィールを確認できるようになります。</p>
+    </div>
+
+    <%= render 'form', therapist_profile: @therapist_profile %>
+  </div>
+</section>
