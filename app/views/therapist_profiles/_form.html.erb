@@ -1,0 +1,27 @@
+<%= form_with model: therapist_profile, local: true do |f| %>
+  <%= render 'shared/error_messages', model: f.object %>
+
+  <div class="field">
+    <p><%= f.label :specialty, '得意分野' %></p>
+    <p><%= f.text_field :specialty %></p>
+  </div>
+
+  <div class="field">
+    <p><%= f.label :bio, '自己紹介' %></p>
+    <p><%= f.text_area :bio, rows: 5 %></p>
+  </div>
+
+  <div class="field">
+    <p><%= f.label :career, '経歴' %></p>
+    <p><%= f.text_area :career, rows: 5 %></p>
+  </div>
+
+  <div class="field">
+    <p><%= f.label :published, '公開状態' %></p>
+    <p><%= f.select :published, [['非公開', false], ['公開する', true]], {}, { class: 'compact-select' } %></p>
+  </div>
+
+  <div class="actions">
+    <%= f.submit '保存する' %>
+  </div>
+<% end %>

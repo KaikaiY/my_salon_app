@@ -1,0 +1,40 @@
+<h1>施術者プロフィール詳細</h1>
+
+<div class="page-actions page-actions-left">
+  <%= link_to(current_user.admin? ? '施術者プロフィール一覧へ戻る' : 'ホームへ戻る', current_user.admin? ? therapist_profiles_path : root_path, class: 'inline-action') %>
+</div>
+
+<section class="detail-card detail-card-centered">
+  <div class="detail-list">
+    <div class="detail-item">
+      <p class="detail-label">施術者</p>
+      <p class="detail-value"><%= @therapist_profile.user.name %></p>
+    </div>
+    <div class="detail-item">
+      <p class="detail-label">得意分野</p>
+      <p class="detail-value"><%= @therapist_profile.specialty %></p>
+    </div>
+    <div class="detail-item">
+      <p class="detail-label">自己紹介</p>
+      <div class="detail-value"><%= simple_format(@therapist_profile.bio) %></div>
+    </div>
+    <div class="detail-item">
+      <p class="detail-label">経歴</p>
+      <div class="detail-value"><%= simple_format(@therapist_profile.career) %></div>
+    </div>
+    <div class="detail-item">
+      <p class="detail-label">公開状態</p>
+      <p class="detail-value">
+        <span class="status-chip <%= @therapist_profile.published? ? 'status-positive' : 'status-neutral' %>">
+          <%= @therapist_profile.published? ? '公開中' : '非公開' %>
+        </span>
+      </p>
+    </div>
+  </div>
+
+  <% if current_user == @therapist_profile.user %>
+    <div class="detail-actions">
+      <%= link_to 'プロフィールを編集する', edit_therapist_profile_path(@therapist_profile), class: 'inline-action' %>
+    </div>
+  <% end %>
+</section>

@@ -1,6 +1,9 @@
 class TherapistProfile < ApplicationRecord
   belongs_to :user
 
+  scope :published_only, -> { where(published: true) }
+
+  validates :user_id, uniqueness: true
   validates :bio, :specialty, :career, presence: true
   validate :user_must_be_therapist
 

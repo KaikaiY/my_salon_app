@@ -1,0 +1,15 @@
+<section class="business-form-page">
+  <div class="business-form-card">
+    <div class="page-actions page-actions-left">
+      <%= link_to '施術者プロフィール一覧へ戻る', therapist_profiles_path, class: 'inline-action' %>
+    </div>
+
+    <h1>施術者プロフィール編集</h1>
+    <div class="business-form-intro">
+      <p>プロフィール内容を更新します。</p>
+      <p>公開中のプロフィールを変更すると、利用者画面にも反映されます。</p>
+    </div>
+
+    <%= render 'form', therapist_profile: @therapist_profile %>
+  </div>
+</section>
