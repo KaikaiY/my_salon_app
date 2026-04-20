@@ -32,7 +32,11 @@ class InvitationsController < ApplicationController
       @invitation.update!(status: :approved, approved_at: Time.current)
     end
 
-    redirect_to invitations_path, notice: 'ユーザーを承認しました。対象ユーザーはログインできるようになりました。'
+    delivery_alert = send_approval_notification(@invitation)
+
+    redirect_to invitations_path,
+                notice: 'ユーザーを承認しました。対象ユーザーはログインできるようになりました。',
+                alert: delivery_alert
   end
 
   private
@@ -43,5 +47,13 @@ class InvitationsController < ApplicationController
 
   def invitation_params
     params.require(:invitation).permit(:email, :company_id, :role, :expires_at)
+  end
+
+  def send_approval_notification(invitation)
+    InvitationMailer.approval_notification(invitation).deliver_now
+    nil
+  rescue StandardError => e
+    Rails.logger.error("Approval notification failed for invitation #{invitation.id}: #{e.class} - #{e.message}")
+    '承認メールの送信に失敗しました。メール設定を確認してください。'
   end
 end

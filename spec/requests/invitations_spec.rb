@@ -115,16 +115,23 @@ RSpec.describe 'Invitations', type: :request do
   end
 
   describe 'PATCH /approve' do
+    before do
+      ActionMailer::Base.deliveries.clear
+    end
+
     it '管理者は承認できること' do
       admin = create(:user, :admin)
       invitation = create(:invitation, :accepted)
       sign_in admin
 
-      patch approve_invitation_path(invitation)
+      expect do
+        patch approve_invitation_path(invitation)
+      end.to change(ActionMailer::Base.deliveries, :count).by(1)
 
       expect(response).to redirect_to(invitations_path)
       expect(invitation.reload.status).to eq('approved')
       expect(invitation.user.reload.active).to be true
+      expect(ActionMailer::Base.deliveries.last.to).to eq([invitation.user.email])
     end
     it '未ログインだとログイン画面にリダイレクトされること' do
       invitation = create(:invitation, :accepted)
