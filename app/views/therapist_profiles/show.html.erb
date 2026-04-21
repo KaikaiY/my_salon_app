@@ -5,6 +5,12 @@
 </div>
 
 <section class="detail-card detail-card-centered">
+  <% if @therapist_profile.image.attached? %>
+    <div class="profile-image-section">
+      <%= image_tag @therapist_profile.image, alt: "#{@therapist_profile.user.name}のプロフィール画像", class: 'profile-image' %>
+    </div>
+  <% end %>
+
   <div class="detail-list">
     <div class="detail-item">
       <p class="detail-label">施術者</p>

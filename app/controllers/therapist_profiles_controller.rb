@@ -41,7 +41,14 @@ class TherapistProfilesController < ApplicationController
   end
 
   def update
-    if @therapist_profile.update(therapist_profile_params)
+    permitted_params = therapist_profile_params.to_h
+    remove_image = ActiveModel::Type::Boolean.new.cast(permitted_params.delete('remove_image'))
+    new_image_uploaded = permitted_params['image'].present?
+
+    if @therapist_profile.update(permitted_params)
+      if remove_image && !new_image_uploaded && @therapist_profile.image.attached?
+        @therapist_profile.image.purge
+      end
       redirect_to therapist_profile_path(@therapist_profile), notice: '施術者プロフィールを更新しました。'
     else
       render :edit, status: :unprocessable_entity
@@ -74,6 +81,6 @@ class TherapistProfilesController < ApplicationController
   end
 
   def therapist_profile_params
-    params.require(:therapist_profile).permit(:bio, :specialty, :career, :published)
+    params.require(:therapist_profile).permit(:bio, :specialty, :career, :published, :image, :remove_image)
   end
 end

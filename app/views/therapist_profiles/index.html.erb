@@ -13,7 +13,16 @@
     <tbody>
       <% @therapist_profiles.each do |therapist_profile| %>
         <tr>
-          <td><%= therapist_profile.user.name %></td>
+          <td>
+            <div class="profile-summary">
+              <% if therapist_profile.image.attached? %>
+                <%= image_tag therapist_profile.image, alt: "#{therapist_profile.user.name}のプロフィール画像", class: 'profile-summary__image' %>
+              <% else %>
+                <div class="profile-summary__placeholder">画像なし</div>
+              <% end %>
+              <span><%= therapist_profile.user.name %></span>
+            </div>
+          </td>
           <td><%= therapist_profile.specialty %></td>
           <td class="status-cell">
             <span class="status-chip <%= therapist_profile.published? ? 'status-positive' : 'status-neutral' %>">

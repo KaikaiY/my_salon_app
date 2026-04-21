@@ -1,5 +1,6 @@
 class TherapistProfile < ApplicationRecord
   belongs_to :user
+  has_one_attached :image
 
   scope :published_only, -> { where(published: true) }
 
