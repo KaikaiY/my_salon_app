@@ -151,4 +151,57 @@ RSpec.describe 'Invitations', type: :request do
       expect(response).to redirect_to(root_path)
     end
   end
+
+  describe 'GET /send_email_confirmation' do
+    it '管理者は確認画面を見られること' do
+      admin = create(:user, :admin)
+      invitation = create(:invitation)
+      sign_in admin
+
+      get send_email_confirmation_invitation_path(invitation)
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    it '申請済みの招待では一覧にリダイレクトされること' do
+      admin = create(:user, :admin)
+      invitation = create(:invitation, :accepted)
+      sign_in admin
+
+      get send_email_confirmation_invitation_path(invitation)
+
+      expect(response).to redirect_to(invitations_path)
+    end
+  end
+
+  describe 'POST /send_email' do
+    before do
+      ActionMailer::Base.deliveries.clear
+    end
+
+    it '管理者は招待メールを送信できること' do
+      admin = create(:user, :admin)
+      invitation = create(:invitation)
+      sign_in admin
+
+      expect do
+        post send_email_invitation_path(invitation)
+      end.to change(ActionMailer::Base.deliveries, :count).by(1)
+
+      expect(response).to redirect_to(invitations_path)
+      expect(ActionMailer::Base.deliveries.last.to).to eq([invitation.email])
+    end
+
+    it '申請済みの招待には送信できないこと' do
+      admin = create(:user, :admin)
+      invitation = create(:invitation, :accepted)
+      sign_in admin
+
+      expect do
+        post send_email_invitation_path(invitation)
+      end.not_to change(ActionMailer::Base.deliveries, :count)
+
+      expect(response).to redirect_to(invitations_path)
+    end
+  end
 end

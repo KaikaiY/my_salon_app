@@ -1,7 +1,7 @@
 class InvitationsController < ApplicationController
   before_action :authenticate_user!
   before_action :ensure_admin!
-  before_action :set_invitation, only: :approve
+  before_action :set_invitation, only: %i[approve send_email_confirmation send_email]
 
   def index
     @invitations = Invitation.includes(:company, :user).recent_first
@@ -39,6 +39,27 @@ class InvitationsController < ApplicationController
                 alert: delivery_alert
   end
 
+  def send_email_confirmation
+    unless invitation_sendable?(@invitation)
+      redirect_to invitations_path, alert: '招待メールを送信できる状態ではありません'
+      return
+    end
+  end
+
+  def send_email
+    unless invitation_sendable?(@invitation)
+      redirect_to invitations_path, alert: '招待メールを送信できる状態ではありません'
+      return
+    end
+
+    InvitationMailer.invitation_email(@invitation).deliver_now
+
+    redirect_to invitations_path, notice: '招待メールを送信しました。'
+  rescue StandardError => e
+    Rails.logger.error("Invitation email failed for invitation #{@invitation.id}: #{e.class} - #{e.message}")
+    redirect_to invitations_path, alert: '招待メールの送信に失敗しました。メール設定を確認してください。'
+  end
+
   private
 
   def set_invitation
@@ -55,5 +76,9 @@ class InvitationsController < ApplicationController
   rescue StandardError => e
     Rails.logger.error("Approval notification failed for invitation #{invitation.id}: #{e.class} - #{e.message}")
     '承認メールの送信に失敗しました。メール設定を確認してください。'
+  end
+
+  def invitation_sendable?(invitation)
+    invitation.available_for_signup?
   end
 end
