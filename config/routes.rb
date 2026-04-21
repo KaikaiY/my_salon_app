@@ -20,5 +20,7 @@ Rails.application.routes.draw do
   end
   resources :invitations, only: %i[index new create] do
     patch :approve, on: :member
+    get :send_email_confirmation, on: :member
+    post :send_email, on: :member
   end
 end

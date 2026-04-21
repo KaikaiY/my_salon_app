@@ -42,6 +42,15 @@
               data-url="<%= new_user_registration_url(invitation_token: invitation.token) %>">
               URLをコピー
             </button>
+            <% if invitation.available_for_signup? %>
+              <p><%= link_to '招待メールを送信', send_email_confirmation_invitation_path(invitation), class: 'inline-action' %></p>
+            <% elsif invitation.accepted? %>
+              <span class="status-chip status-pending">申請済みのため送信不可</span>
+            <% elsif invitation.approved? %>
+              <span class="status-chip status-positive">承認済みのため送信不要</span>
+            <% else %>
+              <span class="status-chip status-negative">送信できません</span>
+            <% end %>
           </td>
           <td class="action-cell approval-cell">
             <% if invitation.accepted? && invitation.user.present? %>

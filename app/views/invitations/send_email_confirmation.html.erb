@@ -1,0 +1,35 @@
+<div class="page-actions page-actions-left">
+  <%= link_to '招待一覧へ戻る', invitations_path, class: 'inline-action' %>
+</div>
+
+<div class="detail-card detail-card-centered">
+  <h2>招待メール送信の確認</h2>
+
+  <div class="detail-list">
+    <div class="detail-item">
+      <p class="detail-label">メールアドレス</p>
+      <p class="detail-value"><%= @invitation.email %></p>
+    </div>
+    <div class="detail-item">
+      <p class="detail-label">権限</p>
+      <p class="detail-value"><%= @invitation.human_role %></p>
+    </div>
+    <div class="detail-item">
+      <p class="detail-label">会社</p>
+      <p class="detail-value"><%= @invitation.company&.company_name || '未設定' %></p>
+    </div>
+    <div class="detail-item">
+      <p class="detail-label">有効期限</p>
+      <p class="detail-value"><%= l(@invitation.expires_at, format: :long) %></p>
+    </div>
+  </div>
+
+  <div class="auth-description">
+    <p>このメールアドレス宛に招待メールを送信します。</p>
+    <p>宛先に誤りがないことを確認してから送信してください。</p>
+  </div>
+
+  <div class="detail-actions">
+    <%= button_to '招待メールを送信する', send_email_invitation_path(@invitation), method: :post %>
+  </div>
+</div>
