@@ -260,6 +260,71 @@ td {
   text-align: left;
 }
 
+.form-hint {
+  margin-top: 8px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.inline-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0 12px;
+}
+
+.inline-checkbox label {
+  margin: 0;
+}
+
+.profile-image-preview {
+  margin-bottom: 12px;
+}
+
+.profile-image-preview__image,
+.profile-image {
+  width: 100%;
+  max-width: 280px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  object-fit: cover;
+}
+
+.profile-image-section {
+  margin-bottom: 24px;
+}
+
+.profile-summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-summary__image,
+.profile-summary__placeholder {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--surface-muted);
+  flex-shrink: 0;
+}
+
+.profile-summary__image {
+  object-fit: cover;
+}
+
+.profile-summary__placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-align: center;
+  padding: 6px;
+}
+
 th {
   background: var(--surface-muted);
   color: var(--primary-dark);

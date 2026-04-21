@@ -1,6 +1,16 @@
 require 'rails_helper'
+require 'tempfile'
 
 RSpec.describe 'TherapistProfiles', type: :request do
+  def uploaded_test_image(filename: 'profile-test.png')
+    file = Tempfile.new([File.basename(filename, '.*'), File.extname(filename)])
+    file.binmode
+    file.write('fake image content')
+    file.rewind
+
+    Rack::Test::UploadedFile.new(file.path, 'image/png')
+  end
+
   describe 'GET /index' do
     it '管理者は施術者プロフィール一覧を見られること' do
       admin = create(:user, :admin)
@@ -132,6 +142,24 @@ RSpec.describe 'TherapistProfiles', type: :request do
 
       expect(response).to redirect_to(root_path)
     end
+
+    it '施術者は画像付きでプロフィールを作成できること' do
+      therapist = create(:user, :therapist)
+      sign_in therapist
+
+      post therapist_profiles_path, params: {
+        therapist_profile: {
+          bio: '画像付きの自己紹介です',
+          specialty: 'ヘッドスパ',
+          career: '経験5年',
+          published: 'true',
+          image: uploaded_test_image
+        }
+      }
+
+      expect(response).to redirect_to(therapist_profile_path(TherapistProfile.last))
+      expect(TherapistProfile.last.image).to be_attached
+    end
   end
 
   describe 'GET /edit' do
@@ -200,6 +228,48 @@ RSpec.describe 'TherapistProfiles', type: :request do
 
       expect(response).to redirect_to(root_path)
       expect(other_profile.reload.specialty).to eq('更新前')
+    end
+
+    it '施術者本人は画像を差し替えられること' do
+      therapist = create(:user, :therapist)
+      therapist_profile = create(:therapist_profile, user: therapist)
+      therapist_profile.image.attach(uploaded_test_image(filename: 'before.png'))
+      old_blob_id = therapist_profile.image.blob.id
+      sign_in therapist
+
+      patch therapist_profile_path(therapist_profile), params: {
+        therapist_profile: {
+          specialty: therapist_profile.specialty,
+          bio: therapist_profile.bio,
+          career: therapist_profile.career,
+          published: therapist_profile.published.to_s,
+          image: uploaded_test_image(filename: 'after.png')
+        }
+      }
+
+      expect(response).to redirect_to(therapist_profile_path(therapist_profile))
+      expect(therapist_profile.reload.image).to be_attached
+      expect(therapist_profile.image.blob.id).not_to eq(old_blob_id)
+    end
+
+    it '施術者本人は削除チェックで画像を削除できること' do
+      therapist = create(:user, :therapist)
+      therapist_profile = create(:therapist_profile, user: therapist)
+      therapist_profile.image.attach(uploaded_test_image(filename: 'delete.png'))
+      sign_in therapist
+
+      patch therapist_profile_path(therapist_profile), params: {
+        therapist_profile: {
+          specialty: therapist_profile.specialty,
+          bio: therapist_profile.bio,
+          career: therapist_profile.career,
+          published: therapist_profile.published.to_s,
+          remove_image: '1'
+        }
+      }
+
+      expect(response).to redirect_to(therapist_profile_path(therapist_profile))
+      expect(therapist_profile.reload.image).not_to be_attached
     end
   end
 end

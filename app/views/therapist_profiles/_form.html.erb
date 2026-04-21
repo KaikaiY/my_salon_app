@@ -2,6 +2,21 @@
   <%= render 'shared/error_messages', model: f.object %>
 
   <div class="field">
+    <p><%= f.label :image, 'プロフィール画像' %></p>
+    <% if therapist_profile.image.attached? %>
+      <div class="profile-image-preview">
+        <%= image_tag therapist_profile.image, alt: "#{therapist_profile.user.name}のプロフィール画像", class: 'profile-image-preview__image' %>
+      </div>
+      <div class="inline-checkbox">
+        <%= f.check_box :remove_image %>
+        <%= f.label :remove_image, '現在の画像を削除する' %>
+      </div>
+    <% end %>
+    <p><%= f.file_field :image, accept: 'image/png,image/jpeg,image/webp' %></p>
+    <p class="form-hint">PNG / JPEG / WebP 形式の画像を1枚アップロードできます。</p>
+  </div>
+
+  <div class="field">
     <p><%= f.label :specialty, '得意分野' %></p>
     <p><%= f.text_field :specialty %></p>
   </div>
