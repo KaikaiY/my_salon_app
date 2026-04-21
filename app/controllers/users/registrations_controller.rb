@@ -29,7 +29,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
     if resource.save
       @invitation.update!(status: :accepted, accepted_at: Time.current, user: resource)
-      redirect_to new_user_session_path, notice: '登録申請を受け付けました。管理者の承認後にログインできます。'
+      redirect_to new_user_session_path, notice: '登録申請を受け付けました。管理者の承認後にログインできます。承認完了後、登録メールアドレス宛にお知らせします。'
     else
       clean_up_passwords resource
       set_minimum_password_length
